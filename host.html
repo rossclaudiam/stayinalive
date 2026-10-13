@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🪩 Stayin' Alive... Or Not — Host Dashboard</title>
+
+<!-- Disco ball favicon -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='35%25' cy='35%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff'/%3E%3Cstop offset='40%25' stop-color='%23c0c0c0'/%3E%3Cstop offset='100%25' stop-color='%23555555'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='42' fill='url(%23g)'/%3E%3Cg stroke='%23888' stroke-width='1' opacity='0.6'%3E%3Cline x1='8' y1='50' x2='92' y2='50'/%3E%3Cline x1='50' y1='8' x2='50' y2='92'/%3E%3Cline x1='15' y1='25' x2='85' y2='75'/%3E%3Cline x1='15' y1='75' x2='85' y2='25'/%3E%3C/g%3E%3C/svg%3E" />
+
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#1a0a4a" />
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0a0530; color: #fff8ea; font-family: ui-serif, Georgia, "Times New Roman", serif; min-height: 100vh; }
+
+  /* Disco background: deep purple/midnight blue with electric accents */
+  body {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(74,196,255,0.14) 0, transparent 25%),
+      radial-gradient(circle at 85% 10%, rgba(124,92,255,0.22) 0, transparent 30%),
+      radial-gradient(circle at 70% 85%, rgba(255,184,77,0.12) 0, transparent 35%),
+      radial-gradient(circle at 25% 90%, rgba(74,196,255,0.14) 0, transparent 25%),
+      linear-gradient(160deg, #2d1670 0%, #1a0a4a 50%, #0a0530 100%);
+    background-attachment: fixed;
+    padding: 28px 20px 100px;
+  }
+  .wrap { max-width: 1150px; margin: 0 auto; }
+
+  /* Headline */
+  .hero { text-align: center; padding: 20px 10px 10px; position: relative; }
+  .hero .ball { font-size: 60px; display: inline-block; animation: spin 4s linear infinite; filter: drop-shadow(0 0 20px #7c5cff); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  h1 {
+    font-family: "Trebuchet MS", "Helvetica Neue", sans-serif;
+    font-size: 56px; letter-spacing: 2px; margin: 10px 0 4px;
+    text-transform: uppercase; font-weight: 900;
+    background: linear-gradient(90deg, #7c5cff 0%, #4ac4ff 25%, #ffb84d 50%, #4ac4ff 75%, #7c5cff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 3s linear infinite;
+    text-shadow: 0 0 40px rgba(124, 92, 255, 0.4);
+  }
+  h1 .dots { color: #ffb84d; -webkit-text-fill-color: #ffb84d; }
+  @keyframes shimmer { to { background-position: 200% center; } }
+
+  .tag {
+    font-family: "Trebuchet MS", sans-serif;
+    letter-spacing: 4px; text-transform: uppercase; font-size: 13px;
+    color: #ffb84d; margin: 0 0 6px;
+  }
+  .sub { color: #c9b8ff; font-style: italic; margin: 0 0 24px; font-size: 15px; }
+  .subtitle-club { color: #4ac4ff; letter-spacing: 1.5px; font-size: 12px; text-transform: uppercase; font-style: normal; margin: -8px 0 20px; font-family: "Trebuchet MS", sans-serif; }
+
+  /* Panel */
+  .panel {
+    background: linear-gradient(180deg, rgba(255,248,234,0.98) 0%, rgba(252,243,230,0.98) 100%);
+    color: #1a0a4a;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin: 16px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,184,77,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .panel h2 {
+    margin: 0 0 12px;
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 22px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #4a2fa8;
+    font-weight: 900;
+  }
+  .panel h3 { margin: 14px 0 6px; font-size: 15px; color: #4a2fa8; letter-spacing: 0.3px; }
+  .panel p, .panel li { font-size: 15px; line-height: 1.6; color: #1a0a4a; }
+
+  .panel.dark {
+    background: linear-gradient(160deg, #180a35 0%, #0a0520 100%);
+    color: #fff8ea;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,92,255,0.5);
+  }
+  .panel.dark h2 { color: #ffb84d; }
+  .panel.dark h3 { color: #a8c6ff; }
+  .panel.dark p, .panel.dark li { color: #e8e0ff; }
+
+  .row { display: flex; flex-wrap: wrap; gap: 14px; }
+  .row > .panel { flex: 1 1 320px; }
+
+  .pill {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; margin-right: 6px;
+    font-family: "Trebuchet MS", sans-serif;
+  }
+  .pill.victim { background: #180a35; color: #ffb84d; border: 1px solid #ffb84d; }
+  .pill.detective { background: #7c5cff; color: #fff; }
+  .pill.killer { background: #4a2fa8; color: #fff; box-shadow: 0 0 10px rgba(124,92,255,0.6); }
+  .pill.suspect { background: #4ac4ff; color: #0a0530; }
+
+  /* Round controls */
+  .round-bar {
+    display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 14px;
+  }
+  .round-btn {
+    padding: 8px 12px; font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    border: 2px solid #7c5cff; background: #fff8ea; color: #4a2fa8;
+    border-radius: 8px; cursor: pointer; font-family: "Trebuchet MS", sans-serif;
+    text-transform: uppercase; transition: all 0.15s;
+    flex: 1 1 auto;
+  }
+  .round-btn:hover { background: #7c5cff; color: #fff; }
+  .round-btn.active {
+    background: linear-gradient(135deg, #7c5cff, #4ac4ff);
+    color: #fff; border-color: #ffb84d;
+    box-shadow: 0 4px 14px rgba(124,92,255,0.5);
+  }
+  .round-nav {
+    display: flex; gap: 8px; align-items: center; margin: 8px 0;
+    padding: 10px 12px; background: rgba(124,92,255,0.15); border-radius: 8px;
+    border: 1px dashed #7c5cff;
+  }
+  .btn {
+    padding: 8px 14px; font-size: 13px; font-weight: 800;
+    border: 2px solid #7c5cff; background: #7c5cff; color: #fff;
+    border-radius: 8px; cursor: pointer; font-family: "Trebuchet MS", sans-serif;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn.secondary { background: #fff8ea; color: #4a2fa8; }
+  .btn.big { font-size: 15px; padding: 12px 20px; background: linear-gradient(135deg, #7c5cff, #4ac4ff); border-color: #ffb84d; }
+
+  .script-box {
+    background: #fff8ea; border-left: 4px solid #7c5cff; padding: 12px 14px;
+    margin: 10px 0; font-style: italic; color: #1a0a4a; border-radius: 0 8px 8px 0;
+  }
+  .script-box b { color: #4a2fa8; }
+
+  .timeline { list-style: none; padding: 0; margin: 0; }
+  .timeline li { padding: 10px 0; border-bottom: 1px dashed rgba(74,47,168,0.25); display: flex; gap: 14px; color: #1a0a4a; }
+  .timeline li:last-child { border-bottom: 0; }
+  .time { font-family: "Trebuchet MS", sans-serif; font-weight: 800; color: #4a2fa8; min-width: 85px; letter-spacing: 0.5px; }
+
+  .controls {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin: 6px 0 10px; padding: 14px 16px;
+    background: rgba(255,248,234,0.95); border-radius: 10px;
+    color: #1a0a4a;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .controls label { font-weight: 800; color: #4a2fa8; font-family: "Trebuchet MS", sans-serif; letter-spacing: 0.3px; }
+  .controls input[type="number"] {
+    width: 70px; padding: 6px 8px; font-size: 15px;
+    border: 2px solid #7c5cff; border-radius: 6px; background: #fff;
+    font-family: inherit; font-weight: 700; color: #1a0a4a;
+  }
+  .controls .note { color: #4a2fa8; font-size: 13px; font-style: italic; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+  .char {
+    background: linear-gradient(160deg, #fff8ea 0%, #f3ebff 100%);
+    color: #1a0a4a;
+    border-radius: 12px; padding: 16px 18px; position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    border: 1px solid rgba(124,92,255,0.4);
+  }
+  .char.hidden-char { opacity: 0.3; filter: grayscale(0.6); }
+  .char h3 { margin: 0 0 4px; font-size: 18px; color: #1a0a4a; font-weight: 800; }
+  .char .role { font-style: italic; color: #4a2fa8; margin: 0 0 10px; font-size: 13px; }
+  .char ul { margin: 0 0 0 18px; padding: 0; font-size: 14px; line-height: 1.5; color: #1a0a4a; }
+  .char .secret {
+    margin-top: 10px; padding: 10px 12px;
+    background: #180a35; color: #ffb84d;
+    border-radius: 8px; font-size: 13px; line-height: 1.5;
+    border: 1px solid #7c5cff;
+  }
+  .char .secret b { color: #a8c6ff; }
+  .char .reveal {
+    font-size: 12px; color: #4a2fa8; cursor: pointer; margin-top: 8px;
+    display: inline-block; text-decoration: underline; font-weight: 700;
+  }
+
+  details { background: rgba(255,248,234,0.95); color: #1a0a4a; border-radius: 10px; padding: 12px 18px; margin: 10px 0; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+  details > summary { cursor: pointer; font-weight: 800; color: #4a2fa8; letter-spacing: 0.5px; font-family: "Trebuchet MS", sans-serif; text-transform: uppercase; font-size: 14px; }
+
+  .solution {
+    background: linear-gradient(160deg, #180a35, #0a0520);
+    color: #fff8ea; border-radius: 14px; padding: 20px 24px; margin: 20px 0;
+    border: 2px solid #7c5cff;
+    box-shadow: 0 0 30px rgba(124,92,255,0.5);
+  }
+  .solution h2 { color: #ffb84d; margin-top: 0; }
+  .solution p { color: #e8e0ff; }
+  .solution p b { color: #a8c6ff; }
+
+  .toc {
+    font-size: 13px; margin-bottom: 20px; text-align: center;
+    font-family: "Trebuchet MS", sans-serif; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .toc a {
+    color: #ffb84d; margin: 0 8px; text-decoration: none;
+    border-bottom: 1px dotted #7c5cff; padding-bottom: 2px;
+  }
+  .toc a:hover { color: #4ac4ff; }
+
+  .guest-link {
+    background: linear-gradient(135deg, #7c5cff, #4ac4ff);
+    color: #fff; padding: 14px 20px; border-radius: 10px;
+    font-family: "Trebuchet MS", sans-serif; text-transform: uppercase;
+    letter-spacing: 1px; font-weight: 800; display: block; text-align: center;
+    text-decoration: none; margin: 10px 0;
+    box-shadow: 0 6px 20px rgba(124,92,255,0.5);
+    border: 1px solid #ffb84d;
+  }
+  .guest-link small { display: block; font-size: 11px; letter-spacing: 0.5px; margin-top: 4px; opacity: 0.9; }
+
+  .round-status {
+    display: inline-block;
+    padding: 6px 14px; margin-left: 10px;
+    background: #ffb84d; color: #0a0530;
+    border-radius: 999px; font-weight: 800;
+    font-family: "Trebuchet MS", sans-serif;
+    letter-spacing: 0.5px; font-size: 12px; text-transform: uppercase;
+  }
+
+  /* Mirror ball decoration */
+  .ball-small {
+    display: inline-block;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff, #c0c0c0 40%, #666 100%);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    vertical-align: middle;
+  }
+
+  /* Lock screen */
+  .lock-screen {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(124,92,255,0.35) 0, transparent 50%),
+      linear-gradient(160deg, #2d1670 0%, #1a0a4a 50%, #0a0530 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .lock-box {
+    background: linear-gradient(180deg, rgba(255,248,234,0.98), rgba(252,243,230,0.98));
+    color: #1a0a4a;
+    padding: 28px 32px; border-radius: 16px;
+    max-width: 420px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,184,77,0.4);
+    text-align: center;
+  }
+  .lock-box .ball { font-size: 52px; display: inline-block; animation: spin 4s linear infinite; filter: drop-shadow(0 0 20px #7c5cff); }
+  .lock-box h2 {
+    margin: 10px 0 4px; font-family: "Trebuchet MS", sans-serif;
+    font-size: 22px; letter-spacing: 1px; text-transform: uppercase; color: #4a2fa8;
+  }
+  .lock-box p { color: #4a2fa8; font-style: italic; margin: 0 0 16px; font-size: 14px; }
+  .lock-box input {
+    width: 100%; padding: 12px 14px; font-size: 16px;
+    border: 2px solid #7c5cff; border-radius: 10px;
+    background: #fff; color: #1a0a4a; font-family: inherit; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .lock-box input:focus { outline: none; box-shadow: 0 0 0 4px rgba(124,92,255,0.25); }
+  .lock-box button {
+    width: 100%; padding: 12px 14px; font-size: 14px; font-weight: 800;
+    border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(135deg, #7c5cff, #4ac4ff); color: #fff;
+    font-family: "Trebuchet MS", sans-serif; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(124,92,255,0.5);
+  }
+  .lock-box .err { color: #4a2fa8; font-weight: 700; margin-top: 6px; font-size: 13px; min-height: 18px; }
+
+  /* Cheat sheet */
+  .cheat {
+    background: linear-gradient(160deg, #180a35, #0a0520);
+    color: #fff8ea; border-radius: 14px; padding: 20px 24px; margin: 20px 0;
+    border: 2px solid #ffb84d;
+    box-shadow: 0 0 30px rgba(255,184,77,0.3);
+  }
+  .cheat h2 { color: #ffb84d; margin-top: 0; }
+  .cheat p { color: #e8e0ff; }
+  .cheat table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0 12px; }
+  .cheat th, .cheat td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(255,184,77,0.2); }
+  .cheat th { color: #ffb84d; font-family: "Trebuchet MS", sans-serif; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; font-size: 11px; }
+  .cheat td { color: #fff8ea; }
+  .cheat td.pass { font-family: ui-monospace, Menlo, Consolas, monospace; color: #a8c6ff; font-weight: 700; }
+  .cheat td.code { font-family: ui-monospace, Menlo, Consolas, monospace; color: #ffb84d; font-weight: 800; letter-spacing: 1px; }
+  .cheat .copy-btn {
+    font-size: 10px; padding: 2px 8px; margin-left: 8px;
+    background: transparent; border: 1px solid #ffb84d; color: #ffb84d;
+    border-radius: 999px; cursor: pointer; font-family: "Trebuchet MS", sans-serif;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .cheat .copy-btn:hover { background: #ffb84d; color: #180a35; }
+
+  .code-reveal {
+    margin-top: 12px; padding: 14px;
+    background: #ffb84d; color: #180a35; border-radius: 10px;
+    font-family: "Trebuchet MS", sans-serif; font-weight: 800;
+    text-align: center; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .code-reveal .code-big {
+    display: block; font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 28px; letter-spacing: 3px; margin-top: 4px; color: #4a2fa8;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen" class="lock-screen">
+  <div class="lock-box">
+    <div class="ball">🪩</div>
+    <h2>Host Dashboard</h2>
+    <p>Only the detective gets in. Enter the host password.</p>
+    <input id="hostPassInput" type="password" placeholder="Host password" autocomplete="off" autofocus />
+    <button id="hostPassBtn">Unlock the Mirror Ball 🪩</button>
+    <div id="lockErr" class="err"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="hero">
+  <div class="ball">🪩</div>
+  <p class="tag">★ A Halloween 1977 Whodunit ★</p>
+  <h1>Stayin&rsquo; Alive<span class="dots">…</span> Or Not</h1>
+  <p class="subtitle-club">Set at the Mirror Ball · Manhattan's hottest disco</p>
+  <p class="sub">Host &amp; Detective Dashboard · 7:30 doors · 8:30 mystery · 10:00 reveal</p>
+</div>
+
+<p class="toc">
+  <a href="#round-controls">🪩 Rounds</a>
+  <a href="#overview">Overview</a>
+  <a href="#timeline">Timeline</a>
+  <a href="#script">Your Script</a>
+  <a href="#cast">The Cast</a>
+  <a href="#ghost">Ghost Rules</a>
+  <a href="#solution">🚨 Solution</a>
+  <a href="#cheat">🔐 Cheat Sheet</a>
+</p>
+
+<!-- ROUND CONTROLS -->
+<div class="panel dark" id="round-controls">
+  <h2>🪩 Round Controls <span class="round-status" id="roundStatus">Pre-game</span></h2>
+  <p style="margin-top:0; color:#e5c7ff; font-size:14px;">
+    Set the current round here. Then <b style="color:#ffb84d;">announce it aloud</b> to your guests —
+    they'll tap the matching round on their phone (the guest landing page) to unlock the next clue.
+  </p>
+
+  <div class="round-bar" id="roundBar">
+    <!-- buttons injected by JS -->
+  </div>
+
+  <div class="round-nav">
+    <button class="btn secondary" id="prevRound">← Previous</button>
+    <button class="btn big" id="nextRound">Advance to Next Round →</button>
+  </div>
+
+  <div style="margin-top: 14px;">
+    <h3 style="color:#ffb84d;">📣 Say this now:</h3>
+    <div class="script-box" id="currentCue" style="background:#fff8ea; color:#2b0a1f;">
+      (loading)
+    </div>
+    <div id="codeReveal"></div>
+  </div>
+</div>
+
+<!-- Guest page link -->
+<a class="guest-link" href="./" target="_blank">
+  🪩 Open Guest Landing Page
+  <small>Share this link with your guests · they type their character name + passphrase to get their card</small>
+</a>
+
+<!-- Guest count control -->
+<div class="controls" id="controls">
+  <label for="guestCount">👯 Guest count (including you &amp; your husband):</label>
+  <input id="guestCount" type="number" min="4" max="21" value="12" />
+  <span class="note" id="activeNote">12 of 21 characters active</span>
+  <button class="btn secondary" id="revealAllBtn">Reveal all secrets</button>
+  <button class="btn secondary" id="hideAllBtn">Hide all secrets</button>
+</div>
+
+<!-- Overview -->
+<div class="panel" id="overview">
+  <h2>🎭 The Setup</h2>
+  <p>It's Halloween, 1977. The <b>Mirror Ball</b> — Manhattan's hottest disco — is throwing its one-year anniversary bash. Everyone who's anyone is on the dance floor: fading starlets, a mob fixer, an astrology columnist, a trust-fund playboy, a funk preacher with a side hustle. The club's charming owner, "Disco" Dino Fontana, has invited his inner circle up to the VIP lounge for a champagne toast at 8:30.</p>
+  <p>At 8:31, Dino crumples to the floor. Somebody has poisoned his signature pink champagne. Luckily, <b>Lieutenant Harriet "Harry" Vance</b> of the NYPD is in the room — off-duty, in a jumpsuit, but still a cop.</p>
+  <p>Dino lingers long enough to witness his own crime scene from the other side. The guests have until 10 PM to figure out who did it — before Harry does.</p>
+</div>
+
+<!-- Timeline -->
+<div class="panel" id="timeline">
+  <h2>⏰ Timeline of the Evening</h2>
+  <ul class="timeline">
+    <li><span class="time">7:30 PM</span><span><b>Doors open.</b> Guests arrive in costume. Point them at the guest landing page to type their character name. Disco music, mocktails/cocktails, small bites. You stay out-of-character.</span></li>
+    <li><span class="time">8:15 PM</span><span><b>In-character mingling begins.</b> Announce: "The Mirror Ball's anniversary toast is in 15 minutes — everybody find your groove."</span></li>
+    <li><span class="time">8:30 PM</span><span><b>🚨 THE MURDER.</b> Dino staggers out, clutches his chest, delivers one line, drops. You step forward as Lt. Vance. Advance to <b>Round 1</b>.</span></li>
+    <li><span class="time">8:45 PM</span><span><b>Round 1 clue.</b> Mel reveals Dino was changing his will <i>tomorrow</i>. Guests tap "Round 1" on their phone to unlock a new clue.</span></li>
+    <li><span class="time">9:00 PM</span><span><b>👻 Ghost emerges.</b> Dino returns in a sheet or white boa. Guests can interview him. Advance to <b>Round 2</b>.</span></li>
+    <li><span class="time">9:15 PM</span><span><b>Round 2 clue.</b> Bartender confirms only one other person touched the pink bottle — someone who went "to grab a jacket."</span></li>
+    <li><span class="time">9:40 PM</span><span><b>Round 3 clue.</b> Letter from "Pearl" found in Dino's pocket, mentions "our Victoria."</span></li>
+    <li><span class="time">9:50 PM</span><span><b>Accusations.</b> Each guest writes their guess on a slip. Prize for correct answers.</span></li>
+    <li><span class="time">10:00 PM</span><span><b>🎉 The reveal.</b> You name the killer. Dino rises from the dead. Dessert, dancing, prizes.</span></li>
+  </ul>
+</div>
+
+<!-- Script (collapsible) -->
+<div class="panel" id="script">
+  <h2>🎤 Your Lines (Lt. Harry Vance)</h2>
+  <p><b>Costume:</b> Flared pantsuit, aviators, badge on a lanyard. Think Columbo meets Pam Grier — dry, warm, a little bemused.</p>
+
+  <details open>
+    <summary>At 8:30 — the body drops</summary>
+    <div class="script-box">"Alright. Nobody panic, nobody leave, and nobody — <b>nobody</b> — touches that champagne glass. I'm Lieutenant Vance, NYPD. I was off-duty, now I'm on. Mel, you were his lawyer — you first."</div>
+  </details>
+  <details>
+    <summary>At 8:45 — Round 1</summary>
+    <div class="script-box">"Mel just told me something interesting. Our victim was changing his will tomorrow. Which means somebody in this room was about to get a very ugly phone call. Think about who. I'll be around."</div>
+  </details>
+  <details>
+    <summary>At 9:15 — Round 2</summary>
+    <div class="script-box">"I just talked to the bartender. Dino's pink bottle lives behind the bar — his bottle, nobody else's. One person besides Dino touched it tonight. Someone who left this room to 'grab a jacket.' Who leaves a party like this to get a jacket in October? Chew on that."</div>
+  </details>
+  <details>
+    <summary>At 9:40 — Round 3</summary>
+    <div class="script-box">"Found this in his pocket. 1972. A woman named Pearl writes about 'our Victoria' and asks Dino to acknowledge her. Pearl died in '72. The kid would be — what, nineteen now? Twenty? Keep an eye out for a Victoria."</div>
+  </details>
+  <details>
+    <summary>At 10:00 — the reveal</summary>
+    <div class="script-box">"Vicki Velvet is Victoria. She's Dino's daughter. She was promised the club. He was about to pull it out from under her. She works the coat check — ten feet from the bar — and she slipped behind the bar when she went to 'grab a jacket.' She had the motive, she had the access, and she had Dino's heart medication from a bottle she lifted out of Dr. Feelgood's bag last week. Case closed. Someone put on 'I Will Survive' — the dead man wants to dance."</div>
+  </details>
+</div>
+
+<!-- Cast -->
+<h2 style="color:#ffb84d; font-family:'Trebuchet MS', sans-serif; letter-spacing:1.5px; text-transform:uppercase; text-align:center; margin: 32px 0 6px;">👯 The Cast</h2>
+<p style="text-align:center; color:#e5c7ff; font-style:italic; margin: 0 0 16px; font-size: 14px;">21 characters max. Trim from the bottom as needed — the slider greys out characters you're cutting. Core minimum is 6 (you, husband, Vicki, Mel, Dr. Feelgood, +1 suspect).</p>
+
+<div class="grid" id="cast"></div>
+
+<!-- Ghost rules -->
+<div class="panel" id="ghost">
+  <h2>👻 Ghost Husband — Rules of Engagement</h2>
+  <p>At 9:00 PM, Dino "comes back" as a ghost. Give him a white blazer, a sheet, sunglasses + white boa — something clearly post-mortem.</p>
+  <h3>What he knows (and will say if asked)</h3>
+  <ul>
+    <li>He was drinking his signature pink champagne all evening — his special bottle, kept behind the bar.</li>
+    <li>He felt the first wave of dizziness around 8:20, after the second glass.</li>
+    <li>He saw Vicki by the bar earlier, but she was always by the bar.</li>
+    <li>He had a letter in his pocket from Pearl, his old girlfriend. He never told anyone.</li>
+    <li>He was going to change his will tomorrow to cut Vicki out and sell to Tito.</li>
+    <li>He is not surprised he's dead. A little surprised it was poison and not a baseball bat.</li>
+  </ul>
+  <h3>What he does NOT know</h3>
+  <ul>
+    <li>Who actually poisoned the glass.</li>
+    <li>That Vicki is his daughter. (Reveal at 10 PM — react accordingly.)</li>
+  </ul>
+  <h3>How to answer</h3>
+  <ul>
+    <li>Truthful about every fact above. Playful and evasive about embarrassing stuff (affair with Bunny, stolen heart meds).</li>
+    <li>If asked about Pearl: "Pearl? Oh, Pearl was… before your time, honey. Beautiful girl. Broke my heart. I was young and stupid."</li>
+    <li>Ghost can drink and dance. Ghost does not have to be morbid.</li>
+  </ul>
+</div>
+
+<!-- Solution -->
+<div class="solution" id="solution">
+  <h2>🚨 Solution (don't let guests see this)</h2>
+  <p><b>Murderer:</b> Vicki Velvet.</p>
+  <p><b>Motive:</b> Dino was her father. He abandoned her mother Pearl (died 1972, broke). He promised Vicki the club. Last week he told her he was selling it to Tito and cutting her out. The new will gets signed tomorrow — tonight was her only window.</p>
+  <p><b>Means:</b> Powdered sedative + crushed heart medication (she stole a bottle from Dr. Feelgood's bag at a party last week) — dropped into Dino's private pink champagne bottle behind the bar.</p>
+  <p><b>Opportunity:</b> She works coat check — just off the bar — and "went to grab a jacket" between songs.</p>
+  <p><b>Red herrings:</b> Tito (Dino's death ruins his deal); Lola (publicly dumped, bitter but not a killer); Chip (debts, but Dino's death helps him); Starla (motive but on-stage during tampering); Reverend (being blackmailed); Bunny (loved him); Mona (lucky guess).</p>
+</div>
+
+<!-- CHEAT SHEET -->
+<div class="cheat" id="cheat">
+  <h2>🔐 Cheat Sheet — Passphrases & Round Codes</h2>
+  <p style="color:#e5c7ff; font-style:italic; margin-top:0; font-size:14px;">
+    Text each guest their <b style="color:#ffb84d;">character name + passphrase</b> the morning of the party.
+    They'll enter both on the guest page to see their card.
+    When you advance a round on the controls above, you'll see the <b style="color:#ffb84d;">round code</b> to announce aloud.
+  </p>
+
+  <h3 style="color:#a8c6ff; margin-top:14px;">Character passphrases <button class="copy-btn" id="copyAllGuests">📋 Copy all</button></h3>
+  <table id="guestTable">
+    <thead><tr><th>Character</th><th>Passphrase</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h3 style="color:#a8c6ff; margin-top:14px;">Round codes (announce aloud)</h3>
+  <table id="codeTable">
+    <thead><tr><th>Round</th><th>Code</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h3 style="color:#a8c6ff; margin-top:14px;">Host password (this dashboard)</h3>
+  <p style="font-family: ui-monospace, Menlo, Consolas, monospace; color:#ffb84d; font-size:16px; letter-spacing:1px;">
+    fontana
+  </p>
+  <p style="color:#e5c7ff; font-size:13px; font-style:italic; margin:0;">
+    (Change it in the HTML file if you'd like — look for <code>HOST_PASSWORD</code> near the bottom.)
+  </p>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+  // =============== HOST PASSWORD GATE ===============
+  const HOST_PASSWORD = "fontana"; // change this to anything you like
+  const lockScreen = document.getElementById('lockScreen');
+  const hostPassInput = document.getElementById('hostPassInput');
+  const hostPassBtn = document.getElementById('hostPassBtn');
+  const lockErr = document.getElementById('lockErr');
+
+  function tryUnlock() {
+    const v = hostPassInput.value.trim().toLowerCase();
+    if (v === HOST_PASSWORD.toLowerCase()) {
+      try { sessionStorage.setItem('mb_host_unlocked', '1'); } catch(e) {}
+      lockScreen.style.display = 'none';
+    } else {
+      lockErr.textContent = "That's not it, detective. Try again.";
+      hostPassInput.value = '';
+      hostPassInput.focus();
+    }
+  }
+  hostPassBtn.addEventListener('click', tryUnlock);
+  hostPassInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+  // Restore unlocked state in same session
+  try {
+    if (sessionStorage.getItem('mb_host_unlocked') === '1') lockScreen.style.display = 'none';
+  } catch(e) {}
+
+  // =============== Round codes ===============
+  // These codes are also baked into the guest page. If you change one, change it in both files.
+  const ROUND_CODES = {
+    0: "",            // pre-game: no code needed
+    1: "murder",
+    2: "ghost",
+    3: "pearl",
+    4: "whodunit",
+    5: "survivor",
+  };
+
+  // =============== Character passphrases ===============
+  // Also baked into the guest page. Keep in sync.
+  const PASSPHRASES = {
+    harry:    "aviator",
+    dino:     "medallion",
+    vicki:    "coatcheck",
+    mel:      "briefcase",
+    feelgood: "housecall",
+    tito:     "pinkyring",
+    lola:     "cigarette",
+    chip:     "trustfund",
+    mona:     "moonrise",
+    reverend: "hallelujah",
+    bunny:    "giggle",
+    starla:   "glitter",
+    // Expansion characters (added when guest count > 12)
+    catfish:  "bassline",
+    candy:    "sequin",
+    hank:     "twostep",
+    delilah:  "polaroid",
+    vince:    "kaftan",
+    honey:    "bunnytail",
+    frankie:  "cinema",
+    jerry:    "shaker",
+    mimi:     "understudy",
+  };
+
+  const CHAR_DISPLAY = {
+    harry:    'Lt. Harriet "Harry" Vance (YOU)',
+    dino:     '"Disco" Dino Fontana (your husband / victim / ghost)',
+    vicki:    'Vicki Velvet (the murderer — don\'t tell her)',
+    mel:      'Melvin "Mel" Mustardseed',
+    feelgood: 'Dr. Freddy "Feelgood" Finkelstein',
+    tito:     'Tito "The Tiger" Travano',
+    lola:     'Lola LaRue',
+    chip:     'Chip Chadwick III',
+    mona:     'Ramona "Mona" Moonbeam',
+    reverend: 'Reverend Shaft Shagwell',
+    bunny:    'Bunny Buttercup',
+    starla:   'Starla Stardust',
+    catfish:  'Carlos "Catfish" Carter',
+    candy:    'Candy Caine',
+    hank:     'Hank "The Hustle" Henderson',
+    delilah:  'Delilah Darling',
+    vince:    'Vince "Velour" Vicenti',
+    honey:    'Honey Blaze',
+    frankie:  'Francesca "Frankie" Finelli',
+    jerry:    'Jerry "The Juice" Juniper (bartender — Round 2 clue-giver when active)',
+    mimi:     'Minnie "Mimi" Monroe',
+  };
+
+  // =============== Round state (shared via localStorage) ===============
+  const ROUNDS = [
+    { id: 0, label: "Pre-game", time: "Before 8:30", cue: "Guests arrive and mingle out-of-character. Point them at the guest landing page so they can type their name + passphrase and get their character card. You're being yourself (the host). Music is on, drinks are flowing. At 8:15, tell everyone to go into character." },
+    { id: 1, label: "Round 1 — The Murder", time: "8:30 PM", cue: "Your husband staggers out, clutches his chest, says 'The champagne… it was… the champagne…' and drops. Step forward: \"Alright. Nobody panic, nobody leave. I'm Lt. Vance, NYPD. Mel, you were his lawyer — you first.\" Then after a few minutes of Q&A, reveal Round 1's clue: Mel confirms Dino was changing his will TOMORROW. Then <b>announce the Round 1 code below</b> so guests can unlock their round-one instructions on their phones." },
+    { id: 2, label: "Round 2 — The Ghost & The Bar", time: "9:00–9:15 PM", cue: "At 9:00, Dino returns as a ghost (sheet, white boa, pale face). Guests may interview him. At 9:15 drop Round 2's clue: \"I just talked to the bartender. Only one person besides Dino touched his pink bottle tonight — someone who left to 'grab a jacket.' Who leaves a party like this to get a jacket in October?\" Then <b>announce the Round 2 code</b>." },
+    { id: 3, label: "Round 3 — The Letter", time: "9:40 PM", cue: "Hold up a letter. \"Found this in Dino's pocket. 1972. A woman named Pearl writes about 'our Victoria' and asks him to acknowledge her. Pearl died in '72. The kid would be nineteen or twenty now. Keep an eye out for a Victoria.\" Then <b>announce the Round 3 code</b>." },
+    { id: 4, label: "Accusations", time: "9:50 PM", cue: "Pass out slips of paper and pens. \"Write who you think did it. And why. Best answer gets the prize. Clock's ticking — you have ten minutes.\" Walk around, be dramatic. Collect slips at 10:00. <b>Announce the Accusations code</b> if you want each guest's phone to show their 'who do I accuse?' prompt." },
+    { id: 5, label: "The Reveal", time: "10:00 PM", cue: "Read the full solution aloud (see Your Script → 'At 10:00 — the reveal' above). Name Vicki. Dino rises from the dead and toasts. <b>Announce the Reveal code</b> and everyone's phone shows their big-moment line. Hand out prizes. Put on 'I Will Survive.' You're done — enjoy your party." },
+  ];
+
+  const roundBar = document.getElementById('roundBar');
+  const roundStatus = document.getElementById('roundStatus');
+  const currentCue = document.getElementById('currentCue');
+  const prevBtn = document.getElementById('prevRound');
+  const nextBtn = document.getElementById('nextRound');
+
+  function getRound() {
+    try { return parseInt(localStorage.getItem('mb_round') || '0', 10); } catch(e) { return 0; }
+  }
+  function setRound(n) {
+    const r = Math.max(0, Math.min(ROUNDS.length - 1, n));
+    try { localStorage.setItem('mb_round', String(r)); } catch(e) {}
+    renderRounds();
+  }
+  function renderRounds() {
+    const r = getRound();
+    roundBar.innerHTML = '';
+    ROUNDS.forEach(round => {
+      const btn = document.createElement('button');
+      btn.className = 'round-btn' + (round.id === r ? ' active' : '');
+      btn.textContent = round.label;
+      btn.onclick = () => setRound(round.id);
+      roundBar.appendChild(btn);
+    });
+    const cur = ROUNDS[r];
+    roundStatus.textContent = cur.label + ' · ' + cur.time;
+    currentCue.innerHTML = cur.cue;
+
+    const codeEl = document.getElementById('codeReveal');
+    if (ROUND_CODES[r]) {
+      codeEl.innerHTML = `
+        <div class="code-reveal">
+          📣 Announce this code to your guests:
+          <span class="code-big">${ROUND_CODES[r]}</span>
+        </div>
+      `;
+    } else {
+      codeEl.innerHTML = '';
+    }
+  }
+  prevBtn.onclick = () => setRound(getRound() - 1);
+  nextBtn.onclick = () => setRound(getRound() + 1);
+  renderRounds();
+
+  // =============== Cheat sheet rendering ===============
+  function renderCheatSheet() {
+    const gtbody = document.querySelector('#guestTable tbody');
+    gtbody.innerHTML = '';
+    for (const [key, phrase] of Object.entries(PASSPHRASES)) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${CHAR_DISPLAY[key]}</td>
+        <td class="pass">${phrase}</td>
+        <td><button class="copy-btn" data-copy="${CHAR_DISPLAY[key].replace(/<[^>]+>/g,'')} — passphrase: ${phrase}">📋 Copy</button></td>
+      `;
+      gtbody.appendChild(tr);
+    }
+
+    const ctbody = document.querySelector('#codeTable tbody');
+    ctbody.innerHTML = '';
+    ROUNDS.forEach(r => {
+      if (!ROUND_CODES[r.id]) return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.label} <span style="color:#e5c7ff; font-size:11px;">(${r.time})</span></td>
+        <td class="code">${ROUND_CODES[r.id]}</td>
+        <td><button class="copy-btn" data-copy="${ROUND_CODES[r.id]}">📋 Copy</button></td>
+      `;
+      ctbody.appendChild(tr);
+    });
+
+    // Copy buttons
+    document.querySelectorAll('.copy-btn[data-copy]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.getAttribute('data-copy');
+        try {
+          await navigator.clipboard.writeText(text);
+          const prev = btn.textContent;
+          btn.textContent = '✓ Copied';
+          setTimeout(() => { btn.textContent = prev; }, 1500);
+        } catch(e) {
+          btn.textContent = '(copy failed)';
+        }
+      });
+    });
+
+    // Copy-all button
+    document.getElementById('copyAllGuests').addEventListener('click', async () => {
+      const lines = Object.entries(PASSPHRASES).map(([k, p]) => {
+        const name = CHAR_DISPLAY[k].replace(/\s*\(.*/, '');
+        return `${name}: ${p}`;
+      });
+      const text = "Mirror Ball — your character passphrase:\n\n" + lines.join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copyAllGuests');
+        const prev = btn.textContent;
+        btn.textContent = '✓ Copied all';
+        setTimeout(() => { btn.textContent = prev; }, 1500);
+      } catch(e) {}
+    });
+  }
+  renderCheatSheet();
+
+  // =============== Cast ===============
+  const CHARS = [
+    { id: 1,  name: "Lt. Harriet \"Harry\" Vance", role: "The Detective (YOU)", kind: "detective", priority: 0,
+      traits: ["Dry, warm, a little bemused","Flared pantsuit + aviators","Off-duty but takes charge"],
+      secret: "You're the host and the proctor. You know everything in the solution — but play it cool. Lead with questions, not answers."},
+    { id: 2,  name: "\"Disco\" Dino Fontana", role: "The Victim / Ghost (your husband)", kind: "victim", priority: 0,
+      traits: ["Flashy, charming, slept-with-everybody","White suit, open shirt, chest medallion","Dies at 8:30, ghosts at 9:00"],
+      secret: "You're the murder victim. See the Ghost Rules section for how to play the ghost phase. You do NOT know who killed you."},
+    { id: 3,  name: "Vicki Velvet", role: "Coat check girl / aspiring singer", kind: "killer", priority: 1,
+      traits: ["Sweet, soft-spoken, a little nervous","Mini-dress + feathered hair","Always hovering near the bar"],
+      secret: "YOU ARE THE MURDERER. Secret daughter of Dino & Pearl (died 1972). Dino promised you the club, now selling it to Tito. You poisoned his pink champagne."},
+    { id: 4,  name: "Melvin \"Mel\" Mustardseed", role: "Dino's long-suffering lawyer & accountant", kind: "suspect", priority: 2,
+      traits: ["Nervous, over-explains, chews a pencil","Brown corduroy suit, wide tie, briefcase","Always has 'just one more form'"],
+      secret: "You know Dino was changing his will TOMORROW to cut out Vicki and sell to Tito. You're the one who reveals the will clue in Round 1. You didn't kill him."},
+    { id: 5,  name: "Dr. Freddy \"Feelgood\" Finkelstein", role: "Society doctor to the stars", kind: "suspect", priority: 3,
+      traits: ["Smooth-talker, pats people on the back","Open-collar silk shirt, gold chains","Prescribes a little too freely"],
+      secret: "You prescribed Dino's heart medication. A bottle was stolen from your bag at a party last week. You suspect — but have not said — that Vicki was there."},
+    { id: 6,  name: "Tito \"The Tiger\" Travano", role: "'Silent partner' / mob fixer", kind: "suspect", priority: 4,
+      traits: ["Growly, generous with compliments and threats","Dark three-piece suit, pinky ring","Buys everyone a drink"],
+      secret: "You wanted to buy the Mirror Ball. Dino kept saying no — until last week when he said yes. You had NO reason to kill him. (He hadn't signed yet, so his death actually ruins your deal.)"},
+    { id: 7,  name: "Lola LaRue", role: "Washed-up Hollywood starlet", kind: "suspect", priority: 5,
+      traits: ["Dramatic, loud, slightly tragic","Fur stole, long cigarette holder, false lashes","Downs every drink in one"],
+      secret: "You had a torrid affair with Dino. He dumped you at Elaine's in front of everyone last month. You hate him. You did not kill him."},
+    { id: 8,  name: "Chip Chadwick III", role: "Trust-fund playboy", kind: "suspect", priority: 6,
+      traits: ["Loud laugh, name-drops shamelessly","Velvet jacket, ascot, Rolex","Already two drinks in by 8pm"],
+      secret: "You owe Dino $40,000 in gambling debts. Dino was about to tell your fiancée (Bunny). His death actually HELPS you — now the debt dies with him."},
+    { id: 9,  name: "Ramona \"Mona\" Moonbeam", role: "Astrology columnist & tarot reader", kind: "suspect", priority: 7,
+      traits: ["Mystical, slow-talking, calls everyone 'love'","Caftan, headscarf, lots of rings","Reads palms uninvited"],
+      secret: "You published a column last week predicting 'a death in a glamorous place by Halloween.' You're embarrassed and secretly thrilled. You did NOT kill him. (Lucky guess.)"},
+    { id: 10, name: "Reverend Shaft Shagwell", role: "Funk singer & self-styled 'spiritual advisor'", kind: "suspect", priority: 8,
+      traits: ["Big voice, big hair, big rings","Purple suit, platform boots, cross medallion","Blesses everything, including the shrimp"],
+      secret: "You run a side business selling 'miracle' diet pills. Dino was going to expose you. You did NOT kill him — he was blackmailing you."},
+    { id: 11, name: "Bunny Buttercup", role: "Playboy-type model, Chip's fiancée", kind: "suspect", priority: 9,
+      traits: ["Sweet voice, giggly, surprisingly sharp","Halter dress, platforms, big hoops","Always 'just stepping out for air'"],
+      secret: "You've been having an affair with Dino behind Chip's back. Dino told you he loved you yesterday. You did NOT kill him — you were planning to leave Chip for him."},
+    { id: 12, name: "Starla Stardust", role: "Fading glam-rock singer", kind: "suspect", priority: 10,
+      traits: ["Theatrical, bitter, name-drops Bowie","Sequined jumpsuit, glitter eyeshadow, boa","Keeps 'warming up her voice'"],
+      secret: "Your one hit song was secretly written by Dino. He was about to claim royalties. You have motive — but you were on-stage when the champagne was tampered with."},
+    // ---------- Expansion characters (13-21) ----------
+    { id: 13, name: "Jerry \"The Juice\" Juniper", role: "The bartender (active player)", kind: "suspect", priority: 11,
+      traits: ["Observant, dry sense of humor","White shirt, black vest, suspenders","Shakes a drink while listening"],
+      secret: "You poured Dino's champagne. You tasted a splash at 7:45 — clean. By the time Dino collapsed at 8:30, something was wrong with the bottle. ROUND 2 CLUE-GIVER (if active): you confirm Vicki slipped behind the bar between songs."},
+    { id: 14, name: "Carlos \"Catfish\" Carter", role: "House-band bassist", kind: "suspect", priority: 12,
+      traits: ["Smooth, understated, says 'yeah man' a lot","Open silk shirt, bellbottoms, pork pie hat","Fiddles with a bass pick"],
+      secret: "Dino owes you $3,200 in session fees. His death means you have to beg the lawyer. You hate it but you didn't do it."},
+    { id: 15, name: "Candy Caine", role: "Visiting Vegas showgirl", kind: "suspect", priority: 13,
+      traits: ["Bombshell, loud laugh, Vegas tan","Sequined mini-dress, feathered showgirl collar","Chews bubble gum"],
+      secret: "Dino made a pass at you last night and you shut him down. You had a loud, public fight with him at the bar at 8:15. Everyone saw. You did NOT kill him."},
+    { id: 16, name: "Hank \"The Hustle\" Henderson", role: "Competitive disco dance champion", kind: "suspect", priority: 14,
+      traits: ["Peacock energy, cannot stop moving","Three-piece white suit, open collar, John Travolta hair","Does spins when nervous"],
+      secret: "Dino promised you the Mirror Ball residency, then gave it to Starla last week. You're bitter. But you were doing a dance exhibition at 8:25 — Starla's band was watching you. Alibi."},
+    { id: 17, name: "Delilah Darling", role: "Gossip columnist (Daily Dish)", kind: "suspect", priority: 15,
+      traits: ["Nosy, note-taking, flattering then cutting","Red cocktail dress, oversized sunglasses indoors","Carries a tiny camera"],
+      secret: "You have polaroids of half this room doing embarrassing things — including Bunny with Dino, Chip at the gambling tables, Reverend selling pills. You blackmail, you don't kill. Dino's death actually hurts you — he was your best source."},
+    { id: 18, name: "Vince \"Velour\" Vicenti", role: "Fashion designer to the stars", kind: "suspect", priority: 16,
+      traits: ["Flamboyant, air-kisses everyone","Head-to-toe velvet, giant collar, platforms","Judges every outfit aloud"],
+      secret: "Dino ordered 40 custom suits for his staff, then stiffed you on the bill. $18,000 unpaid. You're furious — but you'd rather sue him than murder him."},
+    { id: 19, name: "Honey Blaze", role: "Playboy centerfold, Chip's sister", kind: "suspect", priority: 17,
+      traits: ["Breathless, surprisingly smart","Fur jacket, hot pants, go-go boots","Protects Chip like a lioness"],
+      secret: "You introduced Chip to Dino's gambling ring. You feel guilty about his debts. You wanted Dino to forgive the debt — not to kill him."},
+    { id: 20, name: "Francesca \"Frankie\" Finelli", role: "Italian film producer", kind: "suspect", priority: 18,
+      traits: ["Chic, chain-smokes, French-kisses hello","Black turtleneck, oversized sunglasses, cigarette holder","Says 'cara' and 'ma dai' constantly"],
+      secret: "You pitched Dino on investing in your disco documentary yesterday. He said no. You're annoyed, not vengeful — you're pitching Tito next."},
+    { id: 21, name: "Minnie \"Mimi\" Monroe", role: "Aspiring actress, Lola's niece", kind: "suspect", priority: 19,
+      traits: ["Wide-eyed, dramatic, star-struck","Marilyn-ish white dress, red lipstick","Says 'omigod' a lot"],
+      secret: "You're having a fling with CHIP (yes, Lola's niece dating Lola's enemy's fiancée-cheater — soap opera). You have NO connection to Dino's death. You're pure chaos."},
+  ];
+
+  const grid = document.getElementById('cast');
+  const guestInput = document.getElementById('guestCount');
+  const activeNote = document.getElementById('activeNote');
+
+  try {
+    const saved = localStorage.getItem('mb_guestCount');
+    if (saved) guestInput.value = saved;
+  } catch(e) {}
+
+  function renderCast() {
+    const n = Math.max(4, Math.min(21, parseInt(guestInput.value, 10) || 12));
+    guestInput.value = n;
+    try { localStorage.setItem('mb_guestCount', String(n)); } catch(e) {}
+
+    const sorted = [...CHARS].sort((a,b) => a.priority - b.priority);
+    const active = new Set(sorted.slice(0, n).map(c => c.id));
+
+    grid.innerHTML = '';
+    for (const c of CHARS) {
+      const isActive = active.has(c.id);
+      const el = document.createElement('div');
+      el.className = 'char' + (isActive ? '' : ' hidden-char');
+      const pillClass = c.kind === 'victim' ? 'victim' : c.kind === 'detective' ? 'detective' : c.kind === 'killer' ? 'killer' : 'suspect';
+      const pillText = c.kind === 'victim' ? 'Victim' : c.kind === 'detective' ? 'Detective' : c.kind === 'killer' ? 'Murderer' : 'Suspect';
+      el.innerHTML = `
+        <span class="pill ${pillClass}">${pillText}</span>
+        ${isActive ? '' : '<span class="pill" style="background:#999;color:#fff;">Cut</span>'}
+        <h3>${c.name}</h3>
+        <p class="role">${c.role}</p>
+        <ul>${c.traits.map(t => `<li>${t}</li>`).join('')}</ul>
+        <span class="reveal">Show secret ▾</span>
+        <div class="secret" style="display:none;"><b>Secret:</b> ${c.secret}</div>
+      `;
+      const btn = el.querySelector('.reveal');
+      const sec = el.querySelector('.secret');
+      btn.addEventListener('click', () => {
+        const shown = sec.style.display !== 'none';
+        sec.style.display = shown ? 'none' : 'block';
+        btn.textContent = shown ? 'Show secret ▾' : 'Hide secret ▴';
+      });
+      grid.appendChild(el);
+    }
+
+    const activeCount = active.size;
+    const cutCount = CHARS.length - activeCount;
+    activeNote.textContent = cutCount === 0
+      ? `All ${activeCount} characters active`
+      : `${activeCount} active · ${cutCount} cut (shown greyed out)`;
+  }
+
+  guestInput.addEventListener('input', renderCast);
+  document.getElementById('revealAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.secret').forEach(s => s.style.display = 'block');
+    document.querySelectorAll('.reveal').forEach(b => b.textContent = 'Hide secret ▴');
+  });
+  document.getElementById('hideAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.secret').forEach(s => s.style.display = 'none');
+    document.querySelectorAll('.reveal').forEach(b => b.textContent = 'Show secret ▾');
+  });
+  renderCast();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🪩 Stayin' Alive... Or Not — Your Character</title>
+
+<!-- Disco ball favicon (inline SVG, no external file needed) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='35%25' cy='35%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff'/%3E%3Cstop offset='40%25' stop-color='%23c0c0c0'/%3E%3Cstop offset='100%25' stop-color='%23555555'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='42' fill='url(%23g)'/%3E%3Cg stroke='%23888' stroke-width='1' opacity='0.6'%3E%3Cline x1='8' y1='50' x2='92' y2='50'/%3E%3Cline x1='50' y1='8' x2='50' y2='92'/%3E%3Cline x1='15' y1='25' x2='85' y2='75'/%3E%3Cline x1='15' y1='75' x2='85' y2='25'/%3E%3C/g%3E%3C/svg%3E" />
+
+<!-- Open Graph / link preview for texting -->
+<meta property="og:title" content="Stayin' Alive... Or Not" />
+<meta property="og:description" content="🪩 A Halloween 1977 murder mystery at the Mirror Ball. Open this link on your phone when you arrive, and enter the character name &amp; passphrase the host texted you." />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#1a0a4a" />
+<meta name="twitter:card" content="summary" />
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100vh; color: #fff8ea; font-family: ui-serif, Georgia, "Times New Roman", serif; }
+  body {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(74,196,255,0.16) 0, transparent 25%),
+      radial-gradient(circle at 85% 10%, rgba(124,92,255,0.24) 0, transparent 30%),
+      radial-gradient(circle at 70% 85%, rgba(255,184,77,0.14) 0, transparent 35%),
+      radial-gradient(circle at 25% 90%, rgba(74,196,255,0.14) 0, transparent 25%),
+      linear-gradient(160deg, #2d1670 0%, #1a0a4a 50%, #0a0530 100%);
+    background-attachment: fixed;
+    padding: 20px 16px 100px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+
+  .hero { text-align: center; padding: 10px 0 6px; }
+  .hero .ball { font-size: 56px; display: inline-block; animation: spin 4s linear infinite; filter: drop-shadow(0 0 20px #7c5cff); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  h1 {
+    font-family: "Trebuchet MS", "Helvetica Neue", sans-serif;
+    font-size: 36px; letter-spacing: 1.5px; margin: 8px 0 2px;
+    text-transform: uppercase; font-weight: 900;
+    background: linear-gradient(90deg, #7c5cff 0%, #4ac4ff 25%, #ffb84d 50%, #4ac4ff 75%, #7c5cff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 3s linear infinite;
+    line-height: 1.1;
+  }
+  h1 .dots { color: #ffb84d; -webkit-text-fill-color: #ffb84d; }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .tag { font-family: "Trebuchet MS", sans-serif; letter-spacing: 3px; text-transform: uppercase; font-size: 11px; color: #ffb84d; margin: 0 0 2px; }
+  .sub { color: #c9b8ff; font-style: italic; margin: 0 0 18px; font-size: 14px; }
+  .subtitle-club { color: #4ac4ff; letter-spacing: 1.2px; font-size: 11px; text-transform: uppercase; font-style: normal; margin: -2px 0 10px; font-family: "Trebuchet MS", sans-serif; }
+
+  /* Panels */
+  .panel {
+    background: linear-gradient(180deg, rgba(255,248,234,0.98) 0%, rgba(252,243,230,0.98) 100%);
+    color: #1a0a4a;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin: 14px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,184,77,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .panel h2 {
+    margin: 0 0 10px;
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 20px; letter-spacing: 1px; text-transform: uppercase;
+    color: #4a2fa8; font-weight: 900;
+  }
+
+  /* Name entry */
+  .name-entry label { display: block; font-family: "Trebuchet MS", sans-serif; font-weight: 800; color: #4a2fa8; letter-spacing: 0.5px; text-transform: uppercase; font-size: 13px; margin-bottom: 8px; }
+  .name-entry input {
+    width: 100%; padding: 14px 16px; font-size: 18px;
+    border: 2px solid #7c5cff; border-radius: 10px;
+    background: #fff; color: #1a0a4a; font-family: inherit; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .name-entry input:focus { outline: none; box-shadow: 0 0 0 4px rgba(124,92,255,0.25); }
+  .name-entry .hint { font-size: 13px; color: #4a2fa8; font-style: italic; margin-top: 8px; }
+  .name-entry button.enter-btn {
+    width: 100%; padding: 14px 16px; font-size: 14px; font-weight: 800;
+    border: none; border-radius: 10px; cursor: pointer; margin-top: 6px;
+    background: linear-gradient(135deg, #7c5cff, #4ac4ff); color: #fff;
+    font-family: "Trebuchet MS", sans-serif; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(124,92,255,0.5);
+  }
+
+  .suggestions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .suggestion {
+    padding: 6px 12px; font-size: 12px; border-radius: 999px;
+    background: rgba(124,92,255,0.12); color: #4a2fa8; cursor: pointer;
+    border: 1px solid rgba(124,92,255,0.3); font-family: "Trebuchet MS", sans-serif;
+    font-weight: 700; letter-spacing: 0.3px;
+  }
+  .suggestion:hover { background: #7c5cff; color: #fff; }
+
+  .err { color: #4a2fa8; font-weight: 700; margin-top: 8px; }
+
+  /* Character card */
+  .card-name {
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 32px; font-weight: 900; letter-spacing: 0.5px;
+    text-align: center; margin: 0 0 2px;
+    background: linear-gradient(90deg, #7c5cff, #4ac4ff, #ffb84d, #4ac4ff, #7c5cff);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 3s linear infinite;
+    line-height: 1.1;
+  }
+  .card-role { text-align: center; font-style: italic; color: #4a2fa8; margin: 0 0 14px; font-size: 15px; }
+
+  .section-label {
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 12px; font-weight: 800; color: #4a2fa8;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin: 16px 0 6px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::before, .section-label::after {
+    content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #7c5cff, transparent);
+  }
+  .section-content { color: #1a0a4a; font-size: 15px; line-height: 1.6; }
+  .section-content ul { margin: 0 0 0 20px; padding: 0; }
+  .section-content li { margin-bottom: 4px; }
+
+  .secret {
+    margin-top: 10px; padding: 14px 16px;
+    background: linear-gradient(160deg, #180a35, #0a0520);
+    color: #ffb84d; border-radius: 10px; font-size: 14px; line-height: 1.6;
+    border: 2px solid #7c5cff;
+    box-shadow: 0 0 20px rgba(124,92,255,0.4);
+  }
+  .secret .secret-label {
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 11px; color: #4ac4ff; letter-spacing: 1.5px; text-transform: uppercase;
+    font-weight: 800; margin-bottom: 6px;
+  }
+  .secret-body { color: #fff8ea; }
+  .secret-body b { color: #a8c6ff; }
+
+  /* Round controls (guest side) */
+  .round-section {
+    margin-top: 20px;
+    padding: 16px 18px;
+    background: linear-gradient(160deg, #180a35, #0a0520);
+    border-radius: 12px;
+    border: 1px solid rgba(124,92,255,0.5);
+    color: #fff8ea;
+  }
+  .round-section h3 {
+    font-family: "Trebuchet MS", sans-serif;
+    margin: 0 0 10px; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+    color: #ffb84d;
+  }
+  .round-bar { display: flex; flex-wrap: wrap; gap: 6px; }
+  .round-btn {
+    flex: 1 1 auto; min-width: 90px;
+    padding: 8px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px;
+    border: 2px solid #7c5cff; background: transparent; color: #a8c6ff;
+    border-radius: 8px; cursor: pointer; font-family: "Trebuchet MS", sans-serif;
+    text-transform: uppercase; transition: all 0.15s;
+  }
+  .round-btn.unlocked { color: #ffb84d; border-color: #ffb84d; }
+  .round-btn.active {
+    background: linear-gradient(135deg, #7c5cff, #4ac4ff);
+    color: #fff; border-color: #ffb84d;
+    box-shadow: 0 4px 14px rgba(124,92,255,0.5);
+  }
+  .round-btn.locked { opacity: 0.4; cursor: not-allowed; }
+
+  .round-reveal {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: #fff8ea; color: #1a0a4a;
+    border-radius: 10px; border-left: 4px solid #7c5cff;
+    font-size: 14px; line-height: 1.6;
+  }
+  .round-reveal b { color: #4a2fa8; }
+  .round-reveal .round-label {
+    display: inline-block; padding: 3px 10px;
+    background: linear-gradient(135deg, #7c5cff, #4ac4ff); color: #fff;
+    border-radius: 999px; font-size: 10px; font-weight: 800;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    margin-bottom: 6px; font-family: "Trebuchet MS", sans-serif;
+  }
+
+  .locked-msg {
+    color: #c9b8ff; font-style: italic; font-size: 13px;
+    padding: 10px; text-align: center;
+  }
+
+  /* Code entry on guest card */
+  .code-entry {
+    margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .code-entry input {
+    flex: 1 1 180px; padding: 10px 12px; font-size: 14px;
+    border: 2px solid #ffb84d; border-radius: 8px;
+    background: #fff; color: #1a0a4a; font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .code-entry input:focus { outline: none; box-shadow: 0 0 0 4px rgba(255,184,77,0.3); }
+  .code-entry button {
+    padding: 10px 16px; font-size: 12px; font-weight: 800;
+    border: none; border-radius: 8px; cursor: pointer;
+    background: #ffb84d; color: #180a35;
+    font-family: "Trebuchet MS", sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .code-entry button:hover { filter: brightness(1.1); }
+  .code-err { color: #a8c6ff; font-size: 12px; margin-top: 6px; font-weight: 700; min-height: 16px; }
+
+  .back-btn {
+    display: inline-block; margin-top: 16px; padding: 10px 18px;
+    background: transparent; color: #a8c6ff;
+    border: 1px solid #7c5cff; border-radius: 8px;
+    font-family: "Trebuchet MS", sans-serif; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-size: 12px;
+    cursor: pointer;
+  }
+  .back-btn:hover { background: #7c5cff; color: #fff; }
+
+  .instructions {
+    background: linear-gradient(160deg, #180a35, #0a0520);
+    border: 1px dashed #7c5cff;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #f0ebff;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .instructions b { color: #ffb84d; }
+
+  /* GHOST — special treatment */
+  .ghost-card { position: relative; }
+  .ghost-card::after {
+    content: "👻"; position: absolute; top: 10px; right: 14px; font-size: 28px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="ball">🪩</div>
+  <p class="tag">★ Stayin&rsquo; Alive<span class="dots">…</span> Or Not ★</p>
+  <h1>Who Are You Tonight?</h1>
+  <p class="subtitle-club">At the Mirror Ball · Halloween 1977</p>
+</div>
+
+<!-- NAME ENTRY -->
+<div class="panel name-entry" id="entry-panel">
+  <h2>🎭 Who Are You?</h2>
+  <div class="instructions">
+    <b>Welcome, groover.</b> The host texted you two things today: your <b>character name</b> and your <b>secret passphrase</b>. Enter both to see your character card.
+    <br/><br/>
+    <b>During the party:</b> each time the host announces a round code aloud, come back here and enter it to unlock new instructions for your character.
+  </div>
+  <label for="nameInput">Your character's name</label>
+  <input id="nameInput" type="text" placeholder="e.g. Vicki, Mel, Dr. Feelgood…" autocomplete="off" />
+  <label for="passInput">Your secret passphrase</label>
+  <input id="passInput" type="text" placeholder="one word (from the host's text)" autocomplete="off" />
+  <button class="enter-btn" id="enterBtn">🪩 Enter the Mirror Ball</button>
+  <div id="errMsg" class="err" style="display:none; margin-top: 10px;"></div>
+</div>
+
+<!-- CHARACTER CARD -->
+<div id="card-panel" style="display:none;"></div>
+
+</div><!-- /wrap -->
+
+<script>
+  // ============== Character data ==============
+  const CHARS = [
+    {
+      key: "harry",
+      name: 'Lt. Harriet "Harry" Vance',
+      aliases: ["harry", "harriet", "vance", "lt vance", "lieutenant", "detective", "harry vance", "lt. vance"],
+      role: "The Detective (YOU'RE THE HOST)",
+      kind: "host",
+      costume: "Flared pantsuit, aviators, badge on a lanyard. Think Columbo meets Pam Grier.",
+      traits: [
+        "Dry, warm, a little bemused by all these fabulous people",
+        "Off-duty but takes charge the moment Dino drops",
+        "Asks questions, lets guests do the accusing",
+      ],
+      relationship: "You're hosting this party. You dropped by the Mirror Ball tonight 'on a tip from an informant.'",
+      secret: "You are the HOST and the proctor. You know the whole solution — but you're pulling it out of the guests, not lecturing them. Head to the <b>Host Dashboard</b> for your full script, timeline, and round controls.",
+    },
+    {
+      key: "dino",
+      name: '"Disco" Dino Fontana',
+      aliases: ["dino", "disco", "fontana", "disco dino", "dino fontana", "the victim", "ghost", "husband"],
+      role: "The Victim / The Ghost",
+      kind: "victim",
+      costume: "White suit, open shirt, chest medallion, aviators. At 9pm add a sheet, white boa, or pale face for ghost mode.",
+      traits: [
+        "Flashy, charming, slept-with-everybody",
+        "Calls everyone 'baby'",
+        "Loves your signature pink champagne",
+      ],
+      relationship: "You own the Mirror Ball. You know everybody. Everybody owes you something — money, favors, feelings.",
+      secret: "You're the murder victim. At 8:30, stagger out clutching your chest, gasp 'The champagne… it was… the champagne…' and drop. At 9:00 you come back as a GHOST (sheet, boa, pale face). See the Ghost section below for how to answer questions.",
+      ghostLines: [
+        '"I always said this place would be the death of me. Didn\'t think it\'d be so literal."',
+        '"Being dead\'s not so bad. The drinks are stronger."',
+        '"Harry, honey — figure this one out, would you? I\'ve got eternity to kill."',
+        '"If anyone asks — I was fabulous to the very end."',
+      ],
+      ghostKnows: [
+        "You were drinking your signature pink champagne all evening — your special bottle, kept behind the bar.",
+        "You felt the first wave of dizziness around 8:20, after your second glass.",
+        "You saw Vicki by the bar earlier — but she was always by the bar, she worked coat check.",
+        "You had a letter in your pocket from Pearl, your old girlfriend from 1958. Nobody knew.",
+        "You were going to change your will TOMORROW — cut Vicki out, sell the club to Tito.",
+        "You're not surprised you're dead. A little surprised it was poison instead of a baseball bat.",
+      ],
+      ghostDoesntKnow: [
+        "Who actually poisoned the glass.",
+        "That Vicki is your daughter. (You will find out at the 10 PM reveal — act appropriately shocked.)",
+      ],
+      rounds: [
+        null, // pre-game
+        { label: "Round 1 — The Death", text: "<b>Showtime, baby.</b> At 8:30 sharp, stagger out, clutch your chest, deliver the line, and <b>drop dramatically</b>. Milk the fall. Lie still until your spouse takes over. Then slip away to put on your ghost costume." },
+        { label: "Round 2 — The Ghost Returns", text: "<b>At 9:00</b> you return as a GHOST. Drift around. Guests will ask you questions. Be truthful about the facts above — but <b>playful</b> about embarrassing things (your affairs, the stolen heart meds). If asked about Pearl: <i>'Pearl? Oh, Pearl was… before your time, honey.'</i> Ghost can drink and dance. House rule." },
+        { label: "Round 3 — Pearl & Victoria", text: "If a guest brings up Pearl or Victoria now, you can get a little misty. <i>'Pearl… I was young and stupid. She wrote to me once about a baby. I thought it was a hustle. I never answered. God, I never answered.'</i> You still don't know Vicki is the baby." },
+        { label: "Accusations", text: "Float around and sow confusion. You can hint that you suspect Tito (you'd be wrong). You can forgive Lola in a dramatic monologue. Enjoy yourself — you're the most interesting corpse in New York." },
+        { label: "The Reveal", text: "When your spouse names Vicki as the killer and reveals she's your daughter — <b>react big</b>. Jaw drop. Hand to (ghostly) chest. <i>'Vicki? Pearl's… MY DAUGHTER? Oh baby. Oh, sweetheart. I'm sorry.'</i> Then rise from the dead and toast her. <i>'Someone put on I Will Survive — the dead man wants to dance!'</i>" },
+      ],
+    },
+    {
+      key: "vicki",
+      name: "Vicki Velvet",
+      aliases: ["vicki", "vicky", "velvet", "vicki velvet", "victoria"],
+      role: "Coat check girl & aspiring singer",
+      kind: "killer",
+      costume: "Mini-dress, feathered hair, big earrings, maybe a satin jacket slung over one arm.",
+      traits: [
+        "Sweet, soft-spoken, a little nervous",
+        "Always hovering near the bar or the coat check",
+        "Keeps saying you 'just adore' Dino",
+      ],
+      relationship: "You work at the Mirror Ball. Dino hired you a year ago. He's been 'mentoring' you.",
+      secret: "<b>YOU ARE THE MURDERER.</b> You are secretly Dino's daughter from his 1958 fling with a woman named Pearl, who died broke in 1972. He promised you the club in his will. Last week he told you he was selling it to Tito and cutting you out. You stole a bottle of heart medication from Dr. Feelgood's bag at a party last week, crushed it with a sedative, and dropped it into Dino's pink champagne bottle tonight while you 'went to grab a jacket.' <b>Do NOT confess.</b> Deflect. Act shocked.",
+      rounds: [
+        null,
+        { label: "Round 1 — Grief & Shock", text: "<b>React with horror and tears when Dino drops.</b> Say things like <i>'Oh my god, he was like a father to me!'</i> (…which, you know, is accurate.) If anyone asks where you were — you were at coat check, as always. If asked about your parents — grew up in Queens, mother died when you were young. Keep it vague." },
+        { label: "Round 2 — Deflect the Bar Clue", text: "When the detective reveals someone 'went to grab a jacket' — <b>stay calm.</b> You can admit you went to the coat room (you work there), but say you were grabbing a coat for a <b>guest</b> who felt chilly. Don't name a specific guest unless pressed. If pressed, say Mona asked for her shawl. Mona will probably agree because she's dramatic." },
+        { label: "Round 3 — The Pearl Letter", text: "When the Pearl letter is revealed — <b>act confused</b>. 'Pearl? Victoria? I don't know anyone by those names.' If someone looks at you, go pale and say you need some air. Then come back and double down. Your mother's name was NOT Pearl, as far as anyone here knows." },
+        { label: "Accusations", text: "<b>Point at Tito.</b> He wanted the club. He had motive. Make a case against him. Alternatively, point at Lola (publicly dumped, bitter). Keep the heat on them. Volunteer tears if useful." },
+        { label: "The Reveal", text: "When the detective names you — <b>let go</b>. You can collapse into tears, or get defiant, or deliver a monologue. Suggested: <i>'He threw my mother away like trash. He threw ME away like trash. I was going to inherit this place. He was going to take that from me too.'</i> You're the villain. Enjoy it." },
+      ],
+    },
+    {
+      key: "mel",
+      name: 'Melvin "Mel" Mustardseed',
+      aliases: ["mel", "melvin", "mustardseed", "mel mustardseed", "lawyer"],
+      role: "Dino's long-suffering lawyer & accountant",
+      kind: "suspect",
+      costume: "Brown corduroy suit, wide tie, thick glasses, briefcase. Pocket protector optional but encouraged.",
+      traits: [
+        "Nervous, over-explains, chews a pencil",
+        "Always has 'just one more form' to sign",
+        "Deeply loyal to Dino despite everything",
+      ],
+      relationship: "You've been Dino's lawyer for 15 years. You've cleaned up a lot of his messes.",
+      secret: "You know Dino was planning to change his will TOMORROW — cutting out Vicki (the coat check girl, who he said was his daughter?!) and selling the club to Tito. You did NOT kill him. <b>You're the Round 1 clue-giver</b> — when the detective calls on you around 8:45, reveal the will information.",
+      rounds: [
+        null,
+        { label: "Round 1 — YOUR BIG MOMENT", text: "<b>When the detective calls on you</b>, look flustered. Chew your pencil. Then reveal: <i>'Dino was going to change his will tomorrow. The current beneficiary — well, that was going to change.'</i> You can hint there was a mystery heir named 'Victoria' in the current will — but say you don't know who that is. (You suspect it was the coat check girl because Dino once muttered 'the kid' when looking at her. But you're not sure.)" },
+        { label: "Round 2 — The Jacket Clue", text: "You weren't at the bar. You were in a corner reviewing papers. If asked, you noticed Vicki heading toward the coat room 'to grab something.' You didn't think anything of it at the time. Mention this if the detective asks." },
+        { label: "Round 3 — Pearl", text: "When the Pearl letter surfaces — react with recognition. <i>'Pearl… Pearl Sutherland? Dino mentioned her once. 20 years ago. I thought she was a story he told when he was drunk.'</i> You never knew about a baby." },
+        { label: "Accusations", text: "Your job: look nervous, be helpful, don't accuse anyone directly. If pushed, say <i>'the person who had the most to lose from the new will.'</i> Which is… the current beneficiary. Which is Victoria. Which is… <i>Oh.</i>" },
+        { label: "The Reveal", text: "React with dawning horror when it all clicks. <i>'The coat check girl was Victoria. I should have known. I should have asked. Dino, you absolute idiot — why didn't you tell me?'</i>" },
+      ],
+    },
+    {
+      key: "feelgood",
+      name: 'Dr. Freddy "Feelgood" Finkelstein',
+      aliases: ["feelgood", "dr feelgood", "freddy", "finkelstein", "dr finkelstein", "doctor"],
+      role: "Society doctor to the stars",
+      kind: "suspect",
+      costume: "Open-collar silk shirt, gold chains, bell-bottoms, mustache. Carries a black doctor bag.",
+      traits: [
+        "Smooth-talker, pats people on the back",
+        "Prescribes a little too freely",
+        "Flirts with everyone, male and female",
+      ],
+      relationship: "You prescribe Dino's heart medication (and some less-legal things).",
+      secret: "A bottle of Dino's heart medication was stolen from your bag at a party last week. You've been meaning to mention it. You remember Vicki was there, hanging around your bag. You did NOT kill him. <b>You're the Round 2 clue-giver</b> — if the detective asks about missing meds, admit it reluctantly.",
+      rounds: [
+        null,
+        { label: "Round 1 — Deflect, Flirt", text: "Deflect, flirt, order drinks. Confirm you were Dino's doctor. Admit he had heart issues. Say he was healthy otherwise. Do NOT mention the stolen bottle yet." },
+        { label: "Round 2 — YOUR BIG MOMENT", text: "<b>When the detective asks about Dino's medication</b> (or if nobody asks by 9:20, volunteer it): <i>'Actually… I had a bottle of his pills stolen from my bag at a party last week. I meant to say something sooner.'</i> If asked who was there: <i>'A lot of people. Someone young, pretty, I don't remember exactly…'</i> You can mention Vicki was there — but as one of several." },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. You can note that Dino had a sentimental streak for an old flame — mentioned a 'Pearl' once when drunk, said she 'got away.' That's all." },
+        { label: "Accusations", text: "You can note that the method (crushed heart meds) suggests someone with access to medication. 'The killer knew what they were doing with those pills.' Let others connect the dots." },
+        { label: "The Reveal", text: "<i>'Oh my god. Vicki. She was at that party. She was by my bag. I remember now.'</i> Clap your hand to your forehead." },
+      ],
+    },
+    {
+      key: "tito",
+      name: 'Tito "The Tiger" Travano',
+      aliases: ["tito", "tiger", "travano", "tito travano", "the tiger", "mob", "silent partner"],
+      role: "'Silent partner' and mob fixer",
+      kind: "suspect",
+      costume: "Dark three-piece suit, pinky ring, slicked-back hair, maybe a toothpick.",
+      traits: [
+        "Growly voice, generous with compliments AND threats",
+        "Buys everyone a drink",
+        "Calls people 'sweetheart' and 'pal'",
+      ],
+      relationship: "You've wanted to buy the Mirror Ball for a year. Dino finally said yes last week.",
+      secret: "Dino was going to SELL you the club. His death actually RUINS your deal — the papers weren't signed. You are not the killer. But you look guilty as hell. <b>You're the biggest red herring in the room.</b> Lean into the menace.",
+      rounds: [
+        null,
+        { label: "Round 1 — Swagger", text: "Act like you own the place. Admit you wanted the club. Admit you and Dino 'had disagreements.' Act unbothered that he's dead." },
+        { label: "Round 2 — Threatened by the Clue", text: "If accused of going to the bar — scoff. You don't fetch your own drinks. You can admit you're frustrated the deal 'might fall through now.' This is subtly a clue that his death HURT you." },
+        { label: "Round 3 — The Letter", text: "You know nothing about Pearl. You can joke: <i>'Dino had a different Pearl every week, sweetheart.'</i>" },
+        { label: "Accusations", text: "If accused directly: laugh big. <i>'Why would I kill the man who was about to make me rich? Think, pal, think.'</i> Then point at Lola or Chip." },
+        { label: "The Reveal", text: "Grudging respect for Vicki. <i>'Kid had moxie. Still, a mess. Now I gotta find a new club.'</i>" },
+      ],
+    },
+    {
+      key: "lola",
+      name: "Lola LaRue",
+      aliases: ["lola", "larue", "lola larue", "starlet"],
+      role: "Washed-up Hollywood starlet",
+      kind: "suspect",
+      costume: "Fur stole, long cigarette holder, false lashes, sequined gown. Big hair.",
+      traits: [
+        "Dramatic, loud, slightly tragic",
+        "Downs every drink in one",
+        "Calls everyone 'darling' and name-drops Hitchcock",
+      ],
+      relationship: "You had a torrid six-month affair with Dino last year.",
+      secret: "Dino dumped you at Elaine's in front of everyone last month. You came tonight to make him regret it — not to kill him. You did NOT kill him. You hate him, which makes you suspect #1. Lean into it.",
+      rounds: [
+        null,
+        { label: "Round 1 — Melodrama", text: "Toast loudly: <i>'To the dead bastard!'</i> Admit the affair, admit the dumping, admit you hate him. Deny killing him with maximum drama." },
+        { label: "Round 2 — The Jacket", text: "You were at the bar frequently (you drink a lot). If accused — <i>'Darling, I was at the bar for drinks, not for murder. Order me another vodka and I'll prove it.'</i>" },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. You can be jealous of her: <i>'Another one? He had SO many Pearls, Rubies, Opals. The man was a jewelry box of women.'</i>" },
+        { label: "Accusations", text: "If accused: <i>'Oh please, if I was going to kill him, I would have done it in his OWN BED.'</i> Then accuse Tito loudly." },
+        { label: "The Reveal", text: "Burst into theatrical tears when it's revealed. <i>'A daughter? He had a DAUGHTER? That bastard.'</i> Then dance with the ghost." },
+      ],
+    },
+    {
+      key: "chip",
+      name: "Chip Chadwick III",
+      aliases: ["chip", "chadwick", "chip chadwick", "playboy"],
+      role: "Trust-fund playboy",
+      kind: "suspect",
+      costume: "Velvet jacket, ascot or neckerchief, Rolex, loafers no socks.",
+      traits: [
+        "Loud laugh, name-drops shamelessly",
+        "Already two drinks in by 8pm",
+        "Calls everyone 'sport' or 'champ'",
+      ],
+      relationship: "You come to the club three nights a week. Engaged to Bunny Buttercup.",
+      secret: "You owe Dino $40,000 in gambling debts. Dino was about to tell your fiancée Bunny. His death actually HELPS you — the debt dies with him. You did NOT kill him (you didn't know he was about to tell Bunny). But you look relieved and people will notice.",
+      rounds: [
+        null,
+        { label: "Round 1 — Blustery", text: "Act annoyed to be here at all. <i>'Do you know who my FATHER is?'</i> Deny owing anyone anything." },
+        { label: "Round 2 — Panicky", text: "If pressed about debts, get defensive. <i>'I settle my accounts, old sport.'</i> Try not to look relieved. Fail at this." },
+        { label: "Round 3 — Clueless", text: "You have no idea who Pearl or Victoria are. You're relieved that someone else is the center of attention." },
+        { label: "Accusations", text: "Point at Tito or at Vicki (randomly). You're a bad detective but a loud one." },
+        { label: "The Reveal", text: "Realize mid-reveal you're off the hook. Pump your fist. Order champagne. Bunny glares at you — she's seen through everything." },
+      ],
+    },
+    {
+      key: "mona",
+      name: 'Ramona "Mona" Moonbeam',
+      aliases: ["mona", "ramona", "moonbeam", "mona moonbeam", "astrology", "tarot"],
+      role: "Astrology columnist & tarot reader",
+      kind: "suspect",
+      costume: "Caftan, headscarf, lots of rings, crystal pendant.",
+      traits: [
+        "Mystical, slow-talking, calls everyone 'love'",
+        "Reads palms uninvited",
+        "Claims the moon is in a 'very unusual house tonight'",
+      ],
+      relationship: "You write a column in a free weekly. Dino let you do readings in the VIP lounge.",
+      secret: "Your column last week predicted 'a death in a glamorous place by Halloween.' You are not the killer — you made a lucky guess. You will milk this for all it's worth.",
+      rounds: [
+        null,
+        { label: "Round 1 — I FORESAW THIS", text: "Say <b>'I FORESAW this'</b> at least four times tonight. Offer to read other guests' palms — it's a great mingling device. Point at suspicious guests dramatically." },
+        { label: "Round 2 — Mystical Hints", text: "Say the cards are 'pointing at someone young and overlooked.' (This is Vicki, but play it as mysticism, not knowledge.) If Vicki tries to use you as her alibi for 'bringing you a shawl' — go along with it or don't, your choice. Dramatic either way." },
+        { label: "Round 3 — Pearl", text: "<i>'Pearl… PEARL. Of course. The spirit of a woman wronged is in this room. I feel her.'</i> You know nothing. Pretend otherwise." },
+        { label: "Accusations", text: "Point dramatically at Vicki — not because you know, but because your 'intuition' says so. Lean on the mystical. If wrong, say the moon moved." },
+        { label: "The Reveal", text: "<i>'I KNEW IT. The cards don't LIE.'</i> Try to upsell everyone on readings afterwards." },
+      ],
+    },
+    {
+      key: "reverend",
+      name: "Reverend Shaft Shagwell",
+      aliases: ["reverend", "shaft", "shagwell", "reverend shaft", "shaft shagwell", "preacher", "funk"],
+      role: "Funk singer & self-styled 'spiritual advisor'",
+      kind: "suspect",
+      costume: "Purple suit, platform boots, big cross medallion, giant hat optional.",
+      traits: [
+        "Big voice, big hair, big rings",
+        "Blesses everything, including the shrimp",
+        "Says 'can I get an AMEN' a lot",
+      ],
+      relationship: "You're a regular performer at the Mirror Ball. You and Dino are 'business associates.'",
+      secret: "You run a side business selling 'miracle' diet pills that are just caffeine and chalk. Dino was going to expose you unless you paid up. You did NOT kill him — his death leaves the file with his lawyer. You're deeply nervous.",
+      rounds: [
+        null,
+        { label: "Round 1 — Hallelujahs", text: "Bless everything. Pray loudly over Dino's body. Change the subject whenever anyone mentions 'business.'" },
+        { label: "Round 2 — Nervous Sweat", text: "Sweat visibly whenever Mel the lawyer is nearby. If asked about your 'spiritual advisor' business, pivot to music. <i>'Brother, I AM the business. The Lord provides.'</i>" },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. You can offer a dramatic prayer for her soul." },
+        { label: "Accusations", text: "<i>'Brother, I am a man of the SPIRIT. I do not take lives, I SAVE them.'</i> Point at Chip or Tito." },
+        { label: "The Reveal", text: "Relieved. Hallelujah. Try to pivot the party into a funk singalong. You still have a diet-pill business to run." },
+      ],
+    },
+    {
+      key: "bunny",
+      name: "Bunny Buttercup",
+      aliases: ["bunny", "buttercup", "bunny buttercup", "model"],
+      role: "Playboy-type model, Chip's fiancée",
+      kind: "suspect",
+      costume: "Halter dress, platforms, big hoop earrings, long straight hair.",
+      traits: [
+        "Sweet voice, giggly, surprisingly sharp",
+        "Always 'just stepping out for air'",
+        "Carries a tiny purse that could not possibly hold anything useful",
+      ],
+      relationship: "You've been engaged to Chip for a year. You've been secretly seeing Dino for three months.",
+      secret: "You and Dino were in love. He told you yesterday he was going to leave his life behind and run away with you. You did NOT kill him — his death is a genuine tragedy for you. Deny the affair until Round 3, then dramatically confess.",
+      rounds: [
+        null,
+        { label: "Round 1 — Hiding Grief", text: "Dab your eyes a lot. Reapply mascara in corners. If anyone asks why you're so upset — <i>'He was a FRIEND. A dear friend.'</i>" },
+        { label: "Round 2 — Sharp Looks", text: "Give Chip sharp looks whenever he jokes about Dino. If Chip gets accused, defend him TOO strongly and over-correct. Something is off and the room should feel it." },
+        { label: "Round 3 — THE CONFESSION", text: "<b>Dramatically confess</b> the affair now. <i>'Dino and I were in love. He was going to leave everything for me. We were going to run away. And someone — SOMEONE — killed him.'</i> Glare at the room. Chip glares back." },
+        { label: "Accusations", text: "Accuse whoever you want. You're grieving. Point at Lola (she was publicly jealous). Point at Tito (menacing). Everyone's a target." },
+        { label: "The Reveal", text: "Devastated when Vicki is named — then furious. <i>'His DAUGHTER? He had a DAUGHTER and never told me?'</i> Reconsider the whole relationship." },
+      ],
+    },
+    {
+      key: "starla",
+      name: "Starla Stardust",
+      aliases: ["starla", "stardust", "starla stardust", "singer", "rock"],
+      role: "Fading glam-rock singer",
+      kind: "suspect",
+      costume: "Sequined jumpsuit, glitter eyeshadow, feather boa, platform boots.",
+      traits: [
+        "Theatrical, bitter, name-drops Bowie constantly",
+        "Keeps 'warming up her voice' very loudly",
+        "Claims she was supposed to be on tour but 'cancelled to be here'",
+      ],
+      relationship: "You and Dino had a brief fling in '74 that produced your only hit song.",
+      secret: "Your one hit song, 'Lady in the Mirror,' was secretly co-written by Dino. He was about to claim royalties, which would expose that you've been lying for ten years. You have motive — but you were ON STAGE performing when the champagne was tampered with. You did NOT kill him.",
+      rounds: [
+        null,
+        { label: "Round 1 — Diva", text: "Act like a diva. Nothing can be about anyone but you. Remind everyone you were ON STAGE at 8:20 performing your hit." },
+        { label: "Round 2 — Insist On Alibi", text: "<i>'I was ON STAGE at 8:20! Everyone saw me! Everyone!'</i> This is actually true. You couldn't have tampered with the bottle. Lean on this." },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. You can pretend you do, dramatically, for attention. 'Oh, PEARL. Everyone knew Pearl.' (You don't. You're lying for attention.)" },
+        { label: "Accusations", text: "Accuse Lola (another jealous ex). Pretend to faint when accused yourself. Get back up and keep accusing." },
+        { label: "The Reveal", text: "<i>'A DAUGHTER? OH my GOD. This is BIGGER than Fleetwood Mac.'</i> Immediately start thinking about how to turn this into a comeback song." },
+      ],
+    },
+    // =============================================================
+    // EXPANSION CHARACTERS (13-21) — only used when guest count > 12
+    // =============================================================
+    {
+      key: "jerry",
+      name: 'Jerry "The Juice" Juniper',
+      aliases: ["jerry", "juice", "juniper", "jerry juniper", "the juice", "bartender"],
+      role: "The bartender at the Mirror Ball",
+      kind: "suspect",
+      costume: "White shirt, black vest, suspenders, slicked-back hair, hand towel over shoulder. Carry a cocktail shaker.",
+      traits: [
+        "Observant, dry sense of humor, hears everything",
+        "Shakes a drink while listening to gossip",
+        "Calls everyone 'friend' or 'boss'",
+      ],
+      relationship: "You pour every drink at this club. Dino is your boss. You've seen everything that happens at this bar.",
+      secret: "You poured Dino's champagne tonight. You tasted a splash from his bottle at 7:45 — clean. By 8:30 something was wrong. You saw Vicki slip BEHIND the bar between songs when she 'went to grab a jacket' — unusual, because coat check is on the other side. <b>YOU ARE THE ROUND 2 CLUE-GIVER.</b> When the detective asks you about the bar at 9:15, confirm all of this.",
+      rounds: [
+        null,
+        { label: "Round 1 — Shocked", text: "React with genuine shock when Dino drops. <i>'I poured his drink an hour ago! It was fine!'</i> Hover near the bar, towel in hand. Let the detective come to you." },
+        { label: "Round 2 — YOUR BIG MOMENT", text: "<b>When the detective asks about the bar</b>, reveal: <i>'Only one person besides Dino touched his pink bottle tonight. It was Vicki — I saw her slip behind the bar between songs when she said she was grabbing a jacket. Coat check is the OTHER side of the room. Didn't think anything of it at the time.'</i> Deliver this calmly, like a credible witness." },
+        { label: "Round 3 — Confirm Pearl Timing", text: "You remember Dino having a letter in his jacket pocket — he showed it to you earlier tonight, said 'this one's from 20 years ago.' You didn't read it, didn't ask." },
+        { label: "Accusations", text: "You're a professional witness, not an accuser. If asked who you'd put money on, say: <i>'The person who went behind my bar. I don't name names, but I don't forget faces either.'</i>" },
+        { label: "The Reveal", text: "Quiet satisfaction. <i>'Called it.'</i> Pour yourself a drink. You've earned it." },
+      ],
+    },
+    {
+      key: "catfish",
+      name: 'Carlos "Catfish" Carter',
+      aliases: ["carlos", "catfish", "carter", "carlos carter", "catfish carter", "bassist", "bass"],
+      role: "House-band bassist at the Mirror Ball",
+      kind: "suspect",
+      costume: "Open silk shirt, bellbottoms, pork pie hat, maybe a thin gold chain. Carry a bass pick.",
+      traits: [
+        "Smooth, understated, says 'yeah man' a lot",
+        "Fiddles with a bass pick when nervous",
+        "Hums basslines absently",
+      ],
+      relationship: "You've played bass for the house band here for a year.",
+      secret: "Dino owes you $3,200 in session fees. He's been dodging you for months. His death means you have to beg the lawyer. You hate it but you did NOT kill him — a dead Dino pays you LESS, not more.",
+      rounds: [
+        null,
+        { label: "Round 1 — Chill but Watchful", text: "Keep playing it cool. If asked about your relationship with Dino: <i>'Yeah, man, we had some business to settle. Still do, I guess.'</i>" },
+        { label: "Round 2 — Alibi", text: "You were on the bandstand with the house band all night. Starla can confirm. If asked about the bar — you only left the stage once for a drink around 8:10." },
+        { label: "Round 3 — Pearl", text: "Doesn't ring a bell. <i>'Dino had a lot of ladies. I kept my head down and played my bass.'</i>" },
+        { label: "Accusations", text: "Shrug. <i>'Someone with a bigger grudge than mine, man. I just wanted my paycheck.'</i> Point at Lola or Tito." },
+        { label: "The Reveal", text: "Nod slowly. <i>'The quiet ones. Always the quiet ones.'</i> Then: <i>'Hey, who do I talk to about my paycheck now?'</i>" },
+      ],
+    },
+    {
+      key: "candy",
+      name: "Candy Caine",
+      aliases: ["candy", "caine", "candy caine", "showgirl", "vegas"],
+      role: "Visiting Vegas showgirl",
+      kind: "suspect",
+      costume: "Sequined mini-dress, feathered showgirl collar, Vegas tan, big false lashes. Chew bubble gum.",
+      traits: [
+        "Bombshell, loud laugh, Vegas tan",
+        "Chews bubble gum constantly",
+        "Calls everyone 'hon' or 'baby doll'",
+      ],
+      relationship: "You're in NYC for a weekend. A friend brought you to the Mirror Ball tonight.",
+      secret: "Dino made a pass at you last night at a different bar — tried to put his hand on your knee. You shut him down publicly. Tonight at 8:15 you had a LOUD fight with him at the bar. Everyone saw. You did NOT kill him. But the fight makes you look guilty.",
+      rounds: [
+        null,
+        { label: "Round 1 — Defensive", text: "If anyone brings up the fight, <b>get loud</b>. <i>'Oh, so because I told him off I'm a MURDERER? That's rich, baby doll.'</i>" },
+        { label: "Round 2 — Alibi", text: "After the fight at 8:15 you stormed to the ladies' room with Bunny to cool off. Bunny can corroborate (and will, if asked)." },
+        { label: "Round 3 — Pearl", text: "You never heard of Pearl. <i>'Honey, I'm not from New York. I don't know your gossip.'</i>" },
+        { label: "Accusations", text: "Point at Lola loudly. <i>'The dumped ex ALWAYS does it, hon. Everyone knows that.'</i>" },
+        { label: "The Reveal", text: "Snap your gum. <i>'The sweet little coat check girl? See, THIS is why I don't trust the quiet ones.'</i>" },
+      ],
+    },
+    {
+      key: "hank",
+      name: 'Hank "The Hustle" Henderson',
+      aliases: ["hank", "henderson", "hustle", "hank henderson", "the hustle", "dancer"],
+      role: "Competitive disco dance champion",
+      kind: "suspect",
+      costume: "White three-piece suit, open collar, big John Travolta hair. Point a lot.",
+      traits: [
+        "Peacock energy, cannot stop moving",
+        "Does spins when nervous",
+        "Says 'you should see my hustle' at least once",
+      ],
+      relationship: "You're a regular performer at the club's dance-off nights.",
+      secret: "Dino promised you the Mirror Ball residency last month, then gave it to Starla's band last week. You're bitter. But you were doing a dance exhibition on the floor at 8:25 — Starla's band was watching you. Rock-solid alibi.",
+      rounds: [
+        null,
+        { label: "Round 1 — Flashy", text: "Hit poses when people look at you. If someone brings up the residency, scoff: <i>'Starla's band? They can't HUSTLE.'</i>" },
+        { label: "Round 2 — Alibi", text: "You were on the dance floor at 8:25. The band saw you. Multiple guests saw you. You're one of the most-witnessed people in the room." },
+        { label: "Round 3 — Pearl", text: "Nope. <i>'The only Pearls I know are the ones around my neck, baby.'</i>" },
+        { label: "Accusations", text: "Point at Starla loudly (your real grudge). <i>'She stole my residency, maybe she stole his life too.'</i>" },
+        { label: "The Reveal", text: "Immediately offer to teach Vicki a hustle move 'before they take you away.' You are completely tone-deaf. It's your charm." },
+      ],
+    },
+    {
+      key: "delilah",
+      name: "Delilah Darling",
+      aliases: ["delilah", "darling", "delilah darling", "gossip", "columnist"],
+      role: "Gossip columnist (Daily Dish)",
+      kind: "suspect",
+      costume: "Red cocktail dress, oversized sunglasses indoors, tiny camera around your neck, notepad.",
+      traits: [
+        "Nosy, note-taking, flattering then cutting",
+        "Carries a tiny camera and uses it",
+        "Says 'off the record' then publishes everything",
+      ],
+      relationship: "You write the Daily Dish gossip column. You get half your stories from this club.",
+      secret: "You have POLAROIDS of half this room doing embarrassing things — Bunny kissing Dino, Chip at the gambling tables, Reverend handing out his fake pills. You blackmail people with them. You did NOT kill Dino — his death actually HURTS you, he was your best source.",
+      rounds: [
+        null,
+        { label: "Round 1 — Scribbling", text: "Take notes constantly. Snap photos of the body (tastefully). If anyone asks what you're writing: <i>'The STORY of the season, darling.'</i>" },
+        { label: "Round 2 — Hint at Photos", text: "If asked where you were — <i>'By the bar, obviously. That's where the stories are.'</i> You can hint you have 'photographs of several people in this room' doing suspicious things — but don't give them up unless pressed." },
+        { label: "Round 3 — Pearl", text: "You dig into your mental file. <i>'Pearl Sutherland? She was in my predecessor's column in '58. Had a baby. Dino denied it. Then she vanished.'</i> You can be the one to confirm the Pearl connection." },
+        { label: "Accusations", text: "Point at Vicki (lucky journalistic instinct) OR Chip (gambling debts photos). You could be right OR wrong — enjoy either outcome." },
+        { label: "The Reveal", text: "Immediately start writing the headline. <i>'KILLER CLUB CRASHES: Secret Daughter Avenges Mother in Pink Champagne Payback.'</i>" },
+      ],
+    },
+    {
+      key: "vince",
+      name: 'Vince "Velour" Vicenti',
+      aliases: ["vince", "vicenti", "velour", "vince vicenti", "vince velour", "designer", "fashion"],
+      role: "Fashion designer to the stars",
+      kind: "suspect",
+      costume: "Head-to-toe velvet suit (any color), giant collar, platforms, air-kiss everyone.",
+      traits: [
+        "Flamboyant, air-kisses everyone",
+        "Judges every outfit aloud",
+        "Says 'this little thing?' about his own suit",
+      ],
+      relationship: "You dressed Dino and half his staff for the club's opening. Big order, big fight.",
+      secret: "Dino ordered 40 custom suits for his staff last year, then stiffed you on the $18,000 bill. You're furious — but you were pursuing him through small claims court, not with poison. You'd rather sue than murder.",
+      rounds: [
+        null,
+        { label: "Round 1 — Loud Grief Act", text: "Pretend to grieve dramatically. Fan yourself. <i>'He owed me so much MONEY, how DARE he die before paying me?'</i>" },
+        { label: "Round 2 — Alibi", text: "You were in the main room all evening critiquing everyone's outfits. Multiple witnesses. You did NOT go near the bar — bar snacks ruin velvet." },
+        { label: "Round 3 — Pearl", text: "No idea who Pearl is. Though you can comment: <i>'A woman named Pearl would never choose polyester, I'll tell you that much.'</i>" },
+        { label: "Accusations", text: "Point at Tito. <i>'That man has NO taste. People with no taste do anything.'</i>" },
+        { label: "The Reveal", text: "Air-kiss Vicki as she's taken away. <i>'I'd dress you for your trial, darling, but you can't afford me either.'</i>" },
+      ],
+    },
+    {
+      key: "honey",
+      name: "Honey Blaze",
+      aliases: ["honey", "blaze", "honey blaze", "centerfold", "playboy"],
+      role: "Playboy centerfold, Chip's sister",
+      kind: "suspect",
+      costume: "Fur jacket, hot pants, go-go boots, big curls, bunny-ear necklace (because of course).",
+      traits: [
+        "Breathless voice, surprisingly smart",
+        "Protects Chip like a lioness",
+        "Signs autographs unprompted",
+      ],
+      relationship: "You're Chip's older sister. You've been bailing him out his whole life.",
+      secret: "You're the one who introduced Chip to Dino's gambling ring last year — thought it would be a fun night, didn't realize Chip would get hooked. You feel GUILTY about his debts. You wanted Dino to FORGIVE the debt, not to kill him. You tried to charm him into it tonight at 8:00. He laughed.",
+      rounds: [
+        null,
+        { label: "Round 1 — Protective of Chip", text: "Hover near Chip. If anyone brings up his debts, say: <i>'My brother is a GOOD man. He makes mistakes but he's good.'</i> Deflect, deflect, deflect." },
+        { label: "Round 2 — Admit You Talked to Dino", text: "If asked where you were at 8:00, admit you spoke with Dino at the bar area — tried to negotiate Chip's debt. He refused. You left in a huff. You did NOT touch his drink." },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. Ask the detective: <i>'Does Pearl have anything to do with my brother? Please tell me no.'</i>" },
+        { label: "Accusations", text: "Chip or Lola. You're bluffing — you don't know. But protect Chip at all costs." },
+        { label: "The Reveal", text: "Immense relief it wasn't Chip. Immediately hug Vicki. <i>'You poor thing. I'm so sorry about your mother.'</i>" },
+      ],
+    },
+    {
+      key: "frankie",
+      name: 'Francesca "Frankie" Finelli',
+      aliases: ["frankie", "francesca", "finelli", "frankie finelli", "francesca finelli", "italian", "producer"],
+      role: "Italian film producer",
+      kind: "suspect",
+      costume: "Black turtleneck, oversized sunglasses, cigarette holder (unlit), slick dark hair. Air-kiss on both cheeks.",
+      traits: [
+        "Chic, chain-smokes (unlit), French-kisses hello",
+        "Says 'cara' and 'ma dai' constantly",
+        "Pitches her documentary to everyone within three sentences",
+      ],
+      relationship: "You met Dino last week. He said he'd invest in your disco documentary. Yesterday he backed out.",
+      secret: "Dino promised you $50,000 for your documentary, then yesterday said no. You're annoyed, not vengeful — you were going to pitch TITO next. His death actually helps your plan: Tito needs a new project.",
+      rounds: [
+        null,
+        { label: "Round 1 — Cool", text: "Shrug at the news. <i>'Ma dai. The man was unreliable. I was not surprised.'</i> Light a cigarette dramatically. Don't actually smoke it indoors." },
+        { label: "Round 2 — Where You Were", text: "You were working the room, pitching your documentary to anyone who'd listen. Multiple witnesses. You did NOT go behind the bar." },
+        { label: "Round 3 — Pearl", text: "You don't know. But comment: <i>'Everyone has a Pearl, cara. In cinema we call it the inciting incident.'</i>" },
+        { label: "Accusations", text: "Shrug Italian-ly. <i>'Who had the most to lose? That one did it.'</i> Point broadly at the room." },
+        { label: "The Reveal", text: "Grab Vicki's arm. <i>'Cara! This is CINEMA! Would you like to be in a documentary?'</i>" },
+      ],
+    },
+    {
+      key: "mimi",
+      name: 'Minnie "Mimi" Monroe',
+      aliases: ["mimi", "minnie", "monroe", "mimi monroe", "minnie monroe", "actress"],
+      role: "Aspiring actress, Lola's niece",
+      kind: "suspect",
+      costume: "White Marilyn-ish halter dress, red lipstick, pageant waves, pearl necklace. Big eyes.",
+      traits: [
+        "Wide-eyed, dramatic, star-struck",
+        "Says 'omigod' a lot",
+        "Clings to Lola's arm",
+      ],
+      relationship: "You're Lola's niece. She brought you tonight to 'introduce you to the right people.'",
+      secret: "You're having a secret fling with CHIP (yes — Lola's niece dating Lola's enemy's fiancée's actual fiancée? Soap opera.) You have NO connection to Dino's death. You're pure chaos, pure red-herring energy. Enjoy yourself.",
+      rounds: [
+        null,
+        { label: "Round 1 — Starstruck", text: "React to the body dropping like it's a scene in a Hitchcock film. <i>'Omigod. OMIGOD. Is this real?'</i> Hover close to Lola." },
+        { label: "Round 2 — Nervous Glances at Chip", text: "You keep glancing at Chip. If Bunny or Lola notices, play dumb. If Chip gets accused, defend him WAY too hard, then clam up." },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. You don't know anybody. You're 21. <i>'Was Pearl in a movie I'd know?'</i>" },
+        { label: "Accusations", text: "Point at random people. You're having the time of your life. You are of no help." },
+        { label: "The Reveal", text: "<i>'OMIGOD a DAUGHTER?'</i> Then, as everyone celebrates — Lola spots your hand brushing Chip's. The TRUE drama of the evening erupts. You're welcome." },
+      ],
+    },
+  ];
+
+  // ============== Rounds & codes ==============
+  // KEEP IN SYNC with mirror_ball_host.html
+  const ROUNDS = [
+    { id: 0, label: "Pre-game" },
+    { id: 1, label: "Round 1 — The Murder (8:30)" },
+    { id: 2, label: "Round 2 — Ghost & Bar (9:00)" },
+    { id: 3, label: "Round 3 — The Letter (9:40)" },
+    { id: 4, label: "Accusations (9:50)" },
+    { id: 5, label: "The Reveal (10:00)" },
+  ];
+  const ROUND_CODES = {
+    0: "",            // pre-game: always unlocked
+    1: "murder",
+    2: "ghost",
+    3: "pearl",
+    4: "whodunit",
+    5: "survivor",
+  };
+  // Normalize codes forgivingly: uppercase, treat spaces and em-dashes as hyphens, strip other noise.
+  function normCode(s) {
+    return (s || "")
+      .toUpperCase()
+      .trim()
+      .replace(/[\s—–_]+/g, "-")  // spaces, em-dash, en-dash, underscore → hyphen
+      .replace(/-+/g, "-")         // collapse multiple hyphens
+      .replace(/[^A-Z0-9-]/g, ""); // strip anything else
+  }
+
+  // ============== Passphrases ==============
+  // KEEP IN SYNC with mirror_ball_host.html
+  const PASSPHRASES = {
+    harry:    "aviator",
+    dino:     "medallion",
+    vicki:    "coatcheck",
+    mel:      "briefcase",
+    feelgood: "housecall",
+    tito:     "pinkyring",
+    lola:     "cigarette",
+    chip:     "trustfund",
+    mona:     "moonrise",
+    reverend: "hallelujah",
+    bunny:    "giggle",
+    starla:   "glitter",
+    catfish:  "bassline",
+    candy:    "sequin",
+    hank:     "twostep",
+    delilah:  "polaroid",
+    vince:    "kaftan",
+    honey:    "bunnytail",
+    frankie:  "cinema",
+    jerry:    "shaker",
+    mimi:     "understudy",
+  };
+  // Normalize forgivingly: lowercase, strip spaces/hyphens/punct entirely so "Coat Check" or "coat-check" also match "coatcheck"
+  function normPhrase(s) { return (s || "").toLowerCase().trim().replace(/[^a-z0-9]/g, ""); }
+
+  // ============== Match name to character ==============
+  function normalize(s) { return (s || "").toLowerCase().trim().replace(/[^a-z ]/g, "").replace(/\s+/g, " "); }
+  function findChar(input) {
+    const q = normalize(input);
+    if (!q) return null;
+    // Exact alias
+    for (const c of CHARS) if (c.aliases.map(normalize).includes(q)) return c;
+    // Starts-with match
+    for (const c of CHARS) {
+      if (normalize(c.name).startsWith(q)) return c;
+      if (c.aliases.some(a => normalize(a).startsWith(q))) return c;
+    }
+    // Contains match
+    for (const c of CHARS) {
+      if (normalize(c.name).includes(q)) return c;
+      if (c.aliases.some(a => normalize(a).includes(q))) return c;
+    }
+    // First word match
+    const first = q.split(" ")[0];
+    for (const c of CHARS) if (c.aliases.map(normalize).includes(first)) return c;
+    return null;
+  }
+
+  // ============== Guest unlocked rounds ==============
+  // We store a Set of round IDs the guest has unlocked (via code entry).
+  function getUnlocked() {
+    try {
+      const raw = localStorage.getItem('mb_guest_unlocked');
+      if (!raw) return new Set([0]);
+      return new Set(JSON.parse(raw).concat([0]));
+    } catch(e) { return new Set([0]); }
+  }
+  function setUnlocked(s) {
+    try { localStorage.setItem('mb_guest_unlocked', JSON.stringify([...s])); } catch(e) {}
+  }
+  function getCurrentRound() {
+    // Current round = highest unlocked round
+    const s = getUnlocked();
+    return Math.max(...[...s]);
+  }
+
+  // ============== Rendering ==============
+  const entryPanel = document.getElementById('entry-panel');
+  const cardPanel = document.getElementById('card-panel');
+  const nameInput = document.getElementById('nameInput');
+  const passInput = document.getElementById('passInput');
+  const enterBtn = document.getElementById('enterBtn');
+  const errMsg = document.getElementById('errMsg');
+
+  function tryEnter() {
+    const char = findChar(nameInput.value);
+    if (!char) {
+      errMsg.textContent = `We can't find a character named "${nameInput.value}". Check your text from the host.`;
+      errMsg.style.display = 'block';
+      return;
+    }
+    const entered = normPhrase(passInput.value);
+    const expected = normPhrase(PASSPHRASES[char.key] || "");
+    if (!entered || entered !== expected) {
+      errMsg.textContent = `That passphrase doesn't match ${char.name.split(' ')[0]}'s. Check your text — it should be a single word.`;
+      errMsg.style.display = 'block';
+      return;
+    }
+    errMsg.style.display = 'none';
+    try { localStorage.setItem('mb_guest_char', char.key); } catch(e) {}
+    showCard(char);
+  }
+
+  enterBtn.addEventListener('click', tryEnter);
+  nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') passInput.focus(); });
+  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryEnter(); });
+
+  // Which round the guest is currently *viewing* (defaults to highest unlocked).
+  // Separate from "unlocked" set so a guest can look back at Round 1 content during Round 3.
+  let viewRound = null;
+
+  function rerenderRoundReveal(char) {
+    const rr = document.getElementById('roundReveal');
+    if (!rr || !char.rounds) return;
+    const r = viewRound !== null ? viewRound : getCurrentRound();
+    const current = char.rounds[r];
+    if (current) {
+      rr.innerHTML = `
+        <div class="round-reveal">
+          <span class="round-label">${current.label}</span>
+          <div>${current.text}</div>
+        </div>
+      `;
+    } else {
+      rr.innerHTML = `
+        <div class="round-reveal">
+          <span class="round-label">Pre-game</span>
+          <div>Mingle in character. Flirt, scheme, order a drink. The host will announce a code when Round 1 begins at 8:30 PM — enter it above to unlock your round-one instructions.</div>
+        </div>
+      `;
+    }
+    // Mark the viewed button as active
+    document.querySelectorAll('.round-btn').forEach(b => {
+      const n = parseInt(b.dataset.round, 10);
+      b.classList.toggle('active', n === r);
+      b.classList.toggle('unlocked', n !== r && getUnlocked().has(n));
+    });
+  }
+
+  function showCard(char) {
+    entryPanel.style.display = 'none';
+    const unlocked = getUnlocked();
+    if (viewRound === null) viewRound = getCurrentRound();
+    const r = viewRound;
+
+    let roundSection = '';
+    if (char.rounds) {
+      roundSection = `
+        <div class="round-section">
+          <h3>🪩 Rounds</h3>
+          <div class="round-bar">
+            ${ROUNDS.map(round => {
+              const isUnlocked = unlocked.has(round.id);
+              const isActive = round.id === r;
+              const cls = isActive ? 'active' : (isUnlocked ? 'unlocked' : 'locked');
+              return `<button class="round-btn ${cls}" data-round="${round.id}" ${!isUnlocked ? 'disabled' : ''}>${round.label.replace(/—.*/, '').replace(/ *\(.*\)/, '')}</button>`;
+            }).join('')}
+          </div>
+          <div class="code-entry">
+            <input id="codeInput" type="text" placeholder="Enter the code the host just announced" autocomplete="off" />
+            <button id="codeBtn">Unlock</button>
+          </div>
+          <div class="code-err" id="codeErr"></div>
+          <div id="roundReveal"></div>
+        </div>
+      `;
+    }
+
+    let ghostSection = '';
+    if (char.key === 'dino') {
+      ghostSection = `
+        <div class="section-label">👻 Ghost Rules</div>
+        <div class="section-content">
+          <p><b>What you know</b> (and will say if asked):</p>
+          <ul>${char.ghostKnows.map(x => `<li>${x}</li>`).join('')}</ul>
+          <p><b>What you do NOT know:</b></p>
+          <ul>${char.ghostDoesntKnow.map(x => `<li>${x}</li>`).join('')}</ul>
+          <p><b>Suggested spooky one-liners:</b></p>
+          <ul>${char.ghostLines.map(x => `<li><i>${x}</i></li>`).join('')}</ul>
+        </div>
+      `;
+    }
+
+    cardPanel.innerHTML = `
+      <div class="panel ${char.key === 'dino' ? 'ghost-card' : ''}">
+        <h2 class="card-name">${char.name}</h2>
+        <p class="card-role">${char.role}</p>
+
+        <div class="section-label">🧥 Costume</div>
+        <div class="section-content">${char.costume}</div>
+
+        <div class="section-label">🎭 The 3 Beats (your personality)</div>
+        <div class="section-content"><ul>${char.traits.map(t => `<li>${t}</li>`).join('')}</ul></div>
+
+        <div class="section-label">🔗 Your connection to Dino</div>
+        <div class="section-content">${char.relationship}</div>
+
+        <div class="secret">
+          <div class="secret-label">🔒 Your secret · do NOT share</div>
+          <div class="secret-body">${char.secret}</div>
+        </div>
+
+        ${ghostSection}
+
+        ${roundSection}
+
+        <button class="back-btn" id="backBtn">← Change Character</button>
+      </div>
+    `;
+    cardPanel.style.display = 'block';
+
+    // Wire round buttons — only switch display among UNLOCKED rounds
+    cardPanel.querySelectorAll('.round-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const n = parseInt(btn.dataset.round, 10);
+        if (!getUnlocked().has(n)) return;
+        // Set this round as the "viewing" round by making it the max unlocked value we show.
+        // We keep the full unlocked set; just change which one's displayed.
+        viewRound = n;
+        rerenderRoundReveal(char);
+      });
+    });
+
+    // Wire code-entry
+    const codeInput = document.getElementById('codeInput');
+    const codeBtn = document.getElementById('codeBtn');
+    const codeErr = document.getElementById('codeErr');
+    function tryUnlock() {
+      const entered = normCode(codeInput.value);
+      if (!entered) return;
+      let matched = null;
+      for (const [id, code] of Object.entries(ROUND_CODES)) {
+        if (code && normCode(code) === entered) { matched = parseInt(id, 10); break; }
+      }
+      if (matched === null) {
+        codeErr.textContent = "That code doesn't match any round. Ask the host to repeat it.";
+        return;
+      }
+      const u = getUnlocked();
+      const wasNew = !u.has(matched);
+      u.add(matched);
+      setUnlocked(u);
+      codeErr.textContent = wasNew ? `✓ Unlocked ${ROUNDS[matched].label}` : `Already unlocked.`;
+      codeErr.style.color = wasNew ? "#5a9b4b" : "#a8c6ff";
+      viewRound = matched;
+      // Full re-render to update round buttons
+      showCard(char);
+      setTimeout(() => {
+        const rr = document.getElementById('roundReveal');
+        if (rr) rr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    }
+    if (codeBtn) {
+      codeBtn.addEventListener('click', tryUnlock);
+      codeInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+    }
+
+    // Fill round reveal
+    rerenderRoundReveal(char);
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      cardPanel.style.display = 'none';
+      cardPanel.innerHTML = '';
+      entryPanel.style.display = 'block';
+      nameInput.value = '';
+      passInput.value = '';
+      errMsg.style.display = 'none';
+      viewRound = null;
+      nameInput.focus();
+      try { localStorage.removeItem('mb_guest_char'); } catch(e) {}
+    });
+  }
+
+  // Restore previous character on refresh
+  try {
+    const prev = localStorage.getItem('mb_guest_char');
+    if (prev) {
+      const char = CHARS.find(c => c.key === prev);
+      if (char) showCard(char);
+    }
+  } catch(e) {}
+</script>
+
+</body>
+</html>

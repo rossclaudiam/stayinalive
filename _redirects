@@ -1,0 +1,8 @@
+# Netlify _redirects — route any wrong path a guest might try back to the entry screen.
+# Netlify processes rules top-to-bottom; the first match wins.
+# Real files (host.html, index.html, favicon, etc.) are served normally; these rules
+# only catch URLs that would otherwise 404.
+
+/guest        /          301
+/guest.html   /          301
+/home         /          301
