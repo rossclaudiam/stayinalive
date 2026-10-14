@@ -180,6 +180,32 @@
   details { background: rgba(255,248,234,0.95); color: #1a0a4a; border-radius: 10px; padding: 12px 18px; margin: 10px 0; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
   details > summary { cursor: pointer; font-weight: 800; color: #4a2fa8; letter-spacing: 0.5px; font-family: "Trebuchet MS", sans-serif; text-transform: uppercase; font-size: 14px; }
 
+  /* Top-level collapsible reference sections (overview, timeline, script, cast, ghost, solution, cheat) */
+  details.panel, details.solution, details.cheat {
+    padding: 18px 22px;
+  }
+  details.panel > summary,
+  details.solution > summary,
+  details.cheat > summary {
+    list-style: none;
+    position: relative;
+    padding-right: 28px;
+    display: block;
+  }
+  details.panel > summary::-webkit-details-marker,
+  details.solution > summary::-webkit-details-marker,
+  details.cheat > summary::-webkit-details-marker { display: none; }
+  details.panel > summary::after,
+  details.solution > summary::after,
+  details.cheat > summary::after {
+    content: "▸"; position: absolute; right: 4px; top: 50%;
+    transform: translateY(-50%); transition: transform 0.15s;
+    color: #ffb84d; font-size: 18px;
+  }
+  details.panel[open] > summary::after,
+  details.solution[open] > summary::after,
+  details.cheat[open] > summary::after { transform: translateY(-50%) rotate(90deg); }
+
   .solution {
     background: linear-gradient(160deg, #180a35, #0a0520);
     color: #fff8ea; border-radius: 14px; padding: 20px 24px; margin: 20px 0;
@@ -298,6 +324,33 @@
     font-family: "Trebuchet MS", sans-serif; font-weight: 800;
     text-align: center; letter-spacing: 1px; text-transform: uppercase;
   }
+
+  /* Vote tracker */
+  .vote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+  @media (max-width: 600px) { .vote-grid { grid-template-columns: 1fr; } }
+  .vote-grid label { display: block; }
+  .vote-label {
+    display: block; font-family: "Trebuchet MS", sans-serif;
+    font-size: 11px; font-weight: 800; color: #ffb84d;
+    letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .vote-grid input, .costume-row input {
+    width: 100%; padding: 10px 12px; font-size: 14px;
+    border: 2px solid #7c5cff; border-radius: 8px;
+    background: #fff; color: #1a0a4a; font-family: inherit; font-weight: 600;
+  }
+  .vote-grid input:focus, .costume-row input:focus { outline: none; box-shadow: 0 0 0 4px rgba(124,92,255,0.25); }
+  .costume-row { display: flex; gap: 10px; align-items: center; }
+  .costume-row input { flex: 1 1 auto; }
+  #costume-reveal {
+    margin-top: 14px; padding: 18px 20px; border-radius: 12px;
+    background: linear-gradient(135deg, #ffb84d, #4ac4ff); color: #180a35;
+    text-align: center;
+    font-family: "Trebuchet MS", sans-serif;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  #costume-reveal .trophy-label { font-size: 12px; font-weight: 800; margin-bottom: 6px; }
+  #costume-reveal .trophy-name { font-size: 24px; font-weight: 900; color: #4a2fa8; }
   .code-reveal .code-big {
     display: block; font-family: ui-monospace, Menlo, Consolas, monospace;
     font-size: 28px; letter-spacing: 3px; margin-top: 4px; color: #4a2fa8;
@@ -328,15 +381,8 @@
   <p class="sub">Host &amp; Detective Dashboard · 7:30 doors · 8:30 mystery · 10:00 reveal</p>
 </div>
 
-<p class="toc">
-  <a href="#round-controls">🪩 Rounds</a>
-  <a href="#overview">Overview</a>
-  <a href="#timeline">Timeline</a>
-  <a href="#script">Your Script</a>
-  <a href="#cast">The Cast</a>
-  <a href="#ghost">Ghost Rules</a>
-  <a href="#solution">🚨 Solution</a>
-  <a href="#cheat">🔐 Cheat Sheet</a>
+<p class="toc" style="font-size:12px;">
+  Mission control is right below. Reference material is collapsed further down — tap to open any time.
 </p>
 
 <!-- ROUND CONTROLS -->
@@ -365,19 +411,48 @@
   </div>
 </div>
 
-<!-- Start the Party -->
-<div class="panel dark" id="party-start">
-  <h2>🎉 Start the Party</h2>
+<!-- Vote Tracker -->
+<div class="panel dark" id="vote-tracker">
+  <h2>🗳️ Vote Tracker</h2>
   <p style="margin-top:0; color:#e8e0ff; font-size:14px;">
-    Before the party, guests who log in see only a <b style="color:#ffb84d;">teaser</b> (character, costume, personality, connection to Dino). Secrets and round scripts stay locked. When you're ready to begin, <b style="color:#ffb84d;">announce the party code</b> aloud and have everyone type it in.
+    After each round, collect paper slips and type the top vote-getters here. Reads back as a "right now the room is pointing at…" announcement you can deliver before advancing to the next round.
   </p>
-  <div class="code-reveal" style="background:linear-gradient(135deg, #ffb84d, #4ac4ff); color:#180a35;">
-    🎙️ Say this to unlock the night:
-    <span class="code-big" style="color:#180a35;" id="partyCodeBig">discoball</span>
+
+  <div class="vote-grid">
+    <label>
+      <span class="vote-label">Round 1 — Top suspects</span>
+      <input type="text" id="vote-r1" placeholder="e.g. Tito (4), Lola (3), Chip (2)" />
+    </label>
+    <label>
+      <span class="vote-label">Round 2 — Top suspects</span>
+      <input type="text" id="vote-r2" placeholder="e.g. Lola (5), Vicki (2), Tito (2)" />
+    </label>
+    <label>
+      <span class="vote-label">Round 3 — Top suspects</span>
+      <input type="text" id="vote-r3" placeholder="e.g. Vicki (4), Lola (3), Reverend (2)" />
+    </label>
+    <label>
+      <span class="vote-label">Final — Correct accusations</span>
+      <input type="text" id="vote-final" placeholder="e.g. Vicki: 4 guests got it right" />
+    </label>
   </div>
-  <p style="color:#c9b8ff; font-size:12px; font-style:italic; margin:10px 0 0;">
-    Tip: do this around 8:00–8:15, after everyone has arrived and before Dino drops at 8:30. Guests who missed the announcement can be given the code at any time to catch up.
+
+  <div class="vote-announce" id="vote-announce" style="display:none;">
+    <h3 style="color:#ffb84d; margin:14px 0 6px;">📣 Say this to the room:</h3>
+    <div class="script-box" id="vote-announce-text" style="background:#fff8ea; color:#1a0a4a;"></div>
+  </div>
+
+  <hr style="border:0; border-top:1px solid rgba(255,184,77,0.3); margin:18px 0;" />
+
+  <h3 style="color:#ffb84d; margin:14px 0 6px;">🏆 Best Costume winner</h3>
+  <p style="color:#e8e0ff; font-size:13px; margin:0 0 10px;">
+    Pick a winner any time during the night. Tap "Reveal" when you're ready to announce it — appears in big letters below.
   </p>
+  <div class="costume-row">
+    <input type="text" id="costume-winner" placeholder="e.g. Jordan Smith (Lola's fur stole was committed)" />
+    <button class="btn" id="costume-reveal-btn">Reveal</button>
+  </div>
+  <div id="costume-reveal" style="display:none;"></div>
 </div>
 
 <!-- Guest page link -->
@@ -395,17 +470,22 @@
   <button class="btn secondary" id="hideAllBtn">Hide all secrets</button>
 </div>
 
-<!-- Overview -->
-<div class="panel" id="overview">
-  <h2>🎭 The Setup</h2>
+<!-- Section divider -->
+<p style="text-align:center; color:#ffb84d; font-family:'Trebuchet MS', sans-serif; letter-spacing:2px; text-transform:uppercase; font-size:11px; margin:30px 0 8px;">
+  ─ reference below · tap to open ─
+</p>
+
+<!-- Overview (collapsed) -->
+<details class="panel" id="overview">
+  <summary><h2 style="display:inline-block; margin:0;">🎭 The Setup</h2></summary>
   <p>It's Halloween, 1977. The <b>Mirror Ball</b> — Manhattan's hottest disco — is throwing its one-year anniversary bash. Everyone who's anyone is on the dance floor: fading starlets, a mob fixer, an astrology columnist, a trust-fund playboy, a funk preacher with a side hustle. The club's charming owner, "Disco" Dino Fontana, has invited his inner circle up to the VIP lounge for a champagne toast at 8:30.</p>
   <p>At 8:31, Dino crumples to the floor. Somebody has poisoned his signature pink champagne. Luckily, <b>Lieutenant Harriet "Harry" Vance</b> of the NYPD is in the room — off-duty, in a jumpsuit, but still a cop.</p>
   <p>Dino lingers long enough to witness his own crime scene from the other side. The guests have until 10 PM to figure out who did it — before Harry does.</p>
-</div>
+</details>
 
-<!-- Timeline -->
-<div class="panel" id="timeline">
-  <h2>⏰ Timeline of the Evening</h2>
+<!-- Timeline (collapsed) -->
+<details class="panel" id="timeline">
+  <summary><h2 style="display:inline-block; margin:0;">⏰ Timeline of the Evening</h2></summary>
   <ul class="timeline">
     <li><span class="time">7:30 PM</span><span><b>Doors open.</b> Guests arrive in costume. Point them at the guest landing page to type their character name. Disco music, mocktails/cocktails, small bites. You stay out-of-character.</span></li>
     <li><span class="time">8:15 PM</span><span><b>In-character mingling begins.</b> Announce: "The Mirror Ball's anniversary toast is in 15 minutes — everybody find your groove."</span></li>
@@ -417,11 +497,11 @@
     <li><span class="time">9:50 PM</span><span><b>Accusations.</b> Each guest writes their guess on a slip. Prize for correct answers.</span></li>
     <li><span class="time">10:00 PM</span><span><b>🎉 The reveal.</b> You name the killer. Dino rises from the dead. Dessert, dancing, prizes.</span></li>
   </ul>
-</div>
+</details>
 
-<!-- Script (collapsible) -->
-<div class="panel" id="script">
-  <h2>🎤 Your Lines (Lt. Harry Vance)</h2>
+<!-- Script (collapsed) -->
+<details class="panel" id="script">
+  <summary><h2 style="display:inline-block; margin:0;">🎤 Your Lines (Lt. Harry Vance)</h2></summary>
   <p><b>Costume:</b> Flared pantsuit, aviators, badge on a lanyard. Think Columbo meets Pam Grier — dry, warm, a little bemused.</p>
 
   <details open>
@@ -444,17 +524,18 @@
     <summary>At 10:00 — the reveal</summary>
     <div class="script-box">"Vicki Velvet is Victoria. She's Dino's daughter. She was promised the club. He was about to pull it out from under her. She works the coat check — ten feet from the bar — and she slipped behind the bar when she went to 'grab a jacket.' She had the motive, she had the access, and she had Dino's heart medication from a bottle she lifted out of Dr. Feelgood's bag last week. Case closed. Someone put on 'I Will Survive' — the dead man wants to dance."</div>
   </details>
-</div>
+</details>
 
-<!-- Cast -->
-<h2 style="color:#ffb84d; font-family:'Trebuchet MS', sans-serif; letter-spacing:1.5px; text-transform:uppercase; text-align:center; margin: 32px 0 6px;">👯 The Cast</h2>
-<p style="text-align:center; color:#e5c7ff; font-style:italic; margin: 0 0 16px; font-size: 14px;">21 characters max. Trim from the bottom as needed — the slider greys out characters you're cutting. Core minimum is 6 (you, husband, Vicki, Mel, Dr. Feelgood, +1 suspect).</p>
+<!-- Cast (collapsed) -->
+<details class="panel" id="cast-panel">
+  <summary><h2 style="display:inline-block; margin:0;">👯 The Cast</h2></summary>
+  <p style="color:#1a0a4a; font-style:italic; margin: 6px 0 16px; font-size: 14px;">21 characters max. Trim from the bottom as needed — the slider greys out characters you're cutting. Core minimum is 6 (you, husband, Vicki, Mel, Dr. Feelgood, +1 suspect).</p>
+  <div class="grid" id="cast"></div>
+</details>
 
-<div class="grid" id="cast"></div>
-
-<!-- Ghost rules -->
-<div class="panel" id="ghost">
-  <h2>👻 Ghost Husband — Rules of Engagement</h2>
+<!-- Ghost rules (collapsed) -->
+<details class="panel" id="ghost">
+  <summary><h2 style="display:inline-block; margin:0;">👻 Ghost Husband — Rules of Engagement</h2></summary>
   <p>At 9:00 PM, Dino "comes back" as a ghost. Give him a white blazer, a sheet, sunglasses + white boa — something clearly post-mortem.</p>
   <h3>What he knows (and will say if asked)</h3>
   <ul>
@@ -476,22 +557,22 @@
     <li>If asked about Pearl: "Pearl? Oh, Pearl was… before your time, honey. Beautiful girl. Broke my heart. I was young and stupid."</li>
     <li>Ghost can drink and dance. Ghost does not have to be morbid.</li>
   </ul>
-</div>
+</details>
 
-<!-- Solution -->
-<div class="solution" id="solution">
-  <h2>🚨 Solution (don't let guests see this)</h2>
+<!-- Solution (collapsed) -->
+<details class="solution" id="solution">
+  <summary><h2 style="display:inline-block; margin:0;">🚨 Solution (don't let guests see this)</h2></summary>
   <p><b>Murderer:</b> Vicki Velvet.</p>
   <p><b>Motive:</b> Dino was her father. He abandoned her mother Pearl (died 1972, broke). He promised Vicki the club. Last week he told her he was selling it to Tito and cutting her out. The new will gets signed tomorrow — tonight was her only window.</p>
   <p><b>Means:</b> Powdered sedative + crushed heart medication (she stole a bottle from Dr. Feelgood's bag at a party last week) — dropped into Dino's private pink champagne bottle behind the bar.</p>
   <p><b>Opportunity:</b> She works coat check — just off the bar — and "went to grab a jacket" between songs.</p>
   <p><b>Red herrings:</b> Tito (Dino's death ruins his deal); Lola (publicly dumped, bitter but not a killer); Chip (debts, but Dino's death helps him); Starla (motive but on-stage during tampering); Reverend (being blackmailed); Bunny (loved him); Mona (lucky guess).</p>
-</div>
+</details>
 
-<!-- CHEAT SHEET -->
-<div class="cheat" id="cheat">
-  <h2>🔐 Cheat Sheet — Passphrases & Round Codes</h2>
-  <p style="color:#e5c7ff; font-style:italic; margin-top:0; font-size:14px;">
+<!-- CHEAT SHEET (collapsed) -->
+<details class="cheat" id="cheat">
+  <summary><h2 style="display:inline-block; margin:0;">🔐 Cheat Sheet — Passphrases &amp; Round Codes</h2></summary>
+  <p style="color:#e5c7ff; font-style:italic; margin-top:10px; font-size:14px;">
     Text each guest their <b style="color:#ffb84d;">character name + passphrase</b> the morning of the party.
     They'll enter both on the guest page to see their card.
     When you advance a round on the controls above, you'll see the <b style="color:#ffb84d;">round code</b> to announce aloud.
@@ -505,7 +586,7 @@
 
   <h3 style="color:#a8c6ff; margin-top:14px;">Party-start code</h3>
   <p style="color:#e8e0ff; font-size:13px; margin:4px 0 10px;">
-    Announce this once (around 8:15, before the murder) to unlock each guest's full character info — secrets, round scripts, everything beyond the teaser.
+    Announce this once around <b>8:00 PM</b>, giving guests ~30 min to read their secret &amp; round scripts before Dino drops at 8:30. (Same code is Round 0's code — shown in the big yellow panel at the top when you're on Pre-game.)
   </p>
   <table style="margin-bottom:14px;">
     <tbody>
@@ -530,7 +611,7 @@
   <p style="color:#e5c7ff; font-size:13px; font-style:italic; margin:0;">
     (Change it in the HTML file if you'd like — look for <code>HOST_PASSWORD</code> near the bottom.)
   </p>
-</div>
+</details>
 
 </div><!-- /wrap -->
 
@@ -568,8 +649,10 @@
 
   // =============== Round codes ===============
   // These codes are also baked into the guest page. If you change one, change it in both files.
+  // Round 0 reuses the PARTY_CODE so when you're on Pre-game, the big "announce this code"
+  // panel shows the party-start code to say at 8:00.
   const ROUND_CODES = {
-    0: "",            // pre-game: no code needed
+    0: "discoball",   // pre-game: this is the party-start code
     1: "murder",
     2: "ghost",
     3: "pearl",
@@ -630,12 +713,12 @@
 
   // =============== Round state (shared via localStorage) ===============
   const ROUNDS = [
-    { id: 0, label: "Pre-game", time: "Before 8:30", cue: "Guests arrive and mingle out-of-character. Point them at the guest landing page so they can type their name + passphrase and get their character card. You're being yourself (the host). Music is on, drinks are flowing. At 8:15, tell everyone to go into character." },
-    { id: 1, label: "Round 1 — The Murder", time: "8:30 PM", cue: "Your husband staggers out, clutches his chest, says 'The champagne… it was… the champagne…' and drops. Step forward: \"Alright. Nobody panic, nobody leave. I'm Lt. Vance, NYPD. Mel, you were his lawyer — you first.\" Then after a few minutes of Q&A, reveal Round 1's clue: Mel confirms Dino was changing his will TOMORROW. Then <b>announce the Round 1 code below</b> so guests can unlock their round-one instructions on their phones." },
-    { id: 2, label: "Round 2 — The Ghost & The Bar", time: "9:00–9:15 PM", cue: "At 9:00, Dino returns as a ghost (sheet, white boa, pale face). Guests may interview him. At 9:15 drop Round 2's clue: \"I just talked to the bartender. Only one person besides Dino touched his pink bottle tonight — someone who left to 'grab a jacket.' Who leaves a party like this to get a jacket in October?\" Then <b>announce the Round 2 code</b>." },
-    { id: 3, label: "Round 3 — The Letter", time: "9:40 PM", cue: "Hold up a letter. \"Found this in Dino's pocket. 1972. A woman named Pearl writes about 'our Victoria' and asks him to acknowledge her. Pearl died in '72. The kid would be nineteen or twenty now. Keep an eye out for a Victoria.\" Then <b>announce the Round 3 code</b>." },
-    { id: 4, label: "Accusations", time: "9:50 PM", cue: "Pass out slips of paper and pens. \"Write who you think did it. And why. Best answer gets the prize. Clock's ticking — you have ten minutes.\" Walk around, be dramatic. Collect slips at 10:00. <b>Announce the Accusations code</b> if you want each guest's phone to show their 'who do I accuse?' prompt." },
-    { id: 5, label: "The Reveal", time: "10:00 PM", cue: "Read the full solution aloud (see Your Script → 'At 10:00 — the reveal' above). Name Vicki. Dino rises from the dead and toasts. <b>Announce the Reveal code</b> and everyone's phone shows their big-moment line. Hand out prizes. Put on 'I Will Survive.' You're done — enjoy your party." },
+    { id: 0, label: "Pre-game", time: "Before 8:30", cue: "<b>Before guests arrive:</b> stack of ~50 index cards + pens on a side table. You'll hand out 10 at a time after each round for suspect votes.<br/><br/><b>7:30 — Doors open.</b> Guests arrive and mingle out-of-character. Point them at the guest landing page if they haven't logged in yet.<br/><br/><b>8:00 — Announce the party code <span style='color:#ffb84d;'>discoball</span></b> (shown below). Guests type it in to unlock their secret backstory + round scripts. Give them ~30 min to read.<br/><br/><b>8:15 — \"Everyone go into character.\"</b> Dim the lights a notch. Music up. Vicki and the clue-givers (Mel, Dr. Feelgood) should now know what they're doing." },
+    { id: 1, label: "Round 1 — The Murder", time: "8:30 PM", cue: "Your husband staggers out, clutches his chest, says 'The champagne… it was… the champagne…' and drops. Step forward: \"Alright. Nobody panic, nobody leave. I'm Lt. Vance, NYPD. Mel, you were his lawyer — you first.\" Then after a few minutes of Q&A, reveal Round 1's clue (Mel confirms Dino was changing his will TOMORROW). <b>Announce the Round 1 code below</b> so guests unlock their round-one instructions.<br/><br/><b>🗳️ Then around 8:50:</b> hand out index cards. <i>\"Write your name and your top suspect. Why if you can. Thirty seconds.\"</i> Collect them. Scan the cards, type the top vote-getters in the Vote Tracker below, read the announcement aloud." },
+    { id: 2, label: "Round 2 — The Ghost & The Bar", time: "9:00–9:15 PM", cue: "At 9:00, Dino returns as a ghost (sheet, white boa, pale face). Guests may interview him. At 9:15 drop Round 2's clue: \"I just talked to the bartender. Only one person besides Dino touched his pink bottle tonight — someone who left to 'grab a jacket.' Who leaves a party like this to get a jacket in October?\" <b>Announce the Round 2 code</b>.<br/><br/><b>🗳️ Around 9:25:</b> hand out index cards again. <i>\"New card, new vote. Who's your suspect NOW? Who moved up, who's cleared?\"</i> Collect, tally, announce." },
+    { id: 3, label: "Round 3 — The Letter", time: "9:40 PM", cue: "Hold up a letter. \"Found this in Dino's pocket. 1972. A woman named Pearl writes about 'our Victoria' and asks him to acknowledge her. Pearl died in '72. The kid would be nineteen or twenty now. Keep an eye out for a Victoria.\" <b>Announce the Round 3 code</b>.<br/><br/><b>🗳️ Around 9:48:</b> last pulse-check card. <i>\"One more. Who do you suspect now?\"</i> Fast — this is a lead-in to the final accusation. Tally, read it out as suspense-building." },
+    { id: 4, label: "Accusations", time: "9:50 PM", cue: "Hand out the <b>final accusation card</b> — a bigger one. <i>\"This is it. Write your final answer: WHO did it, WHY, and your Best Costume vote. Prize for the correct accusation. Prize for Best Costume by room vote. Five minutes.\"</i> Walk around looking detective-y. Collect at 9:58. <b>Announce the Accusations code</b> if you want guests to see their phone's accusation prompt.<br/><br/>Count the final votes, pick the Best Costume winner (type them in below). Prep for the reveal." },
+    { id: 5, label: "The Reveal", time: "10:00 PM", cue: "Read the full solution aloud (see Your Script → 'At 10:00 — the reveal' above). Name Vicki. Hand out prizes to anyone who guessed correctly (type their count in the Final field of the Vote Tracker). Dino rises from the dead and toasts. <b>Announce the Reveal code</b> and everyone's phone shows their big-moment line.<br/><br/><b>🏆 Then: tap \"Reveal\" on Best Costume</b> in the Vote Tracker below. The winner's name appears in big letters. Hand over the trophy. Put on 'I Will Survive.' You're done — enjoy your party." },
   ];
 
   const roundBar = document.getElementById('roundBar');
@@ -682,9 +765,71 @@
   nextBtn.onclick = () => setRound(getRound() + 1);
   renderRounds();
 
-  // Populate the party-code display from the constant
-  const partyCodeBig = document.getElementById('partyCodeBig');
-  if (partyCodeBig) partyCodeBig.textContent = PARTY_CODE;
+  // =============== Vote Tracker ===============
+  const voteFields = [
+    { id: 'vote-r1', label: 'Round 1' },
+    { id: 'vote-r2', label: 'Round 2' },
+    { id: 'vote-r3', label: 'Round 3' },
+    { id: 'vote-final', label: 'Final' },
+  ];
+  const announceBox = document.getElementById('vote-announce');
+  const announceText = document.getElementById('vote-announce-text');
+
+  function refreshVoteAnnouncement() {
+    // Pull the LAST non-empty field (whichever round was just filled)
+    let latest = null;
+    for (const f of voteFields) {
+      const v = (document.getElementById(f.id).value || '').trim();
+      if (v) latest = { label: f.label, text: v };
+    }
+    if (!latest) {
+      announceBox.style.display = 'none';
+      return;
+    }
+    announceBox.style.display = 'block';
+    if (latest.label === 'Final') {
+      announceText.innerHTML = `"Alright groovers, final tally: <b>${latest.text}</b>. Hold onto your sequins — the reveal is coming."`;
+    } else {
+      announceText.innerHTML = `"After ${latest.label}, the room is pointing at: <b>${latest.text}</b>. Round ${latest.label === 'Round 1' ? 2 : latest.label === 'Round 2' ? 3 : 'the accusations'} starts now."`;
+    }
+  }
+
+  voteFields.forEach(f => {
+    const el = document.getElementById(f.id);
+    // Restore saved value
+    try { el.value = localStorage.getItem('mb_' + f.id) || ''; } catch(e) {}
+    el.addEventListener('input', () => {
+      try { localStorage.setItem('mb_' + f.id, el.value); } catch(e) {}
+      refreshVoteAnnouncement();
+    });
+  });
+  refreshVoteAnnouncement();
+
+  // Best Costume
+  const costumeInput = document.getElementById('costume-winner');
+  const costumeBtn = document.getElementById('costume-reveal-btn');
+  const costumeOut = document.getElementById('costume-reveal');
+  try { costumeInput.value = localStorage.getItem('mb_costume_winner') || ''; } catch(e) {}
+  costumeInput.addEventListener('input', () => {
+    try { localStorage.setItem('mb_costume_winner', costumeInput.value); } catch(e) {}
+    // If currently revealed, update the shown name
+    if (costumeOut.style.display !== 'none') showCostume();
+  });
+  function showCostume() {
+    const name = (costumeInput.value || '').trim();
+    if (!name) {
+      costumeOut.style.display = 'none';
+      return;
+    }
+    costumeOut.innerHTML = `
+      <div class="trophy-label">🏆 Best Costume Winner</div>
+      <div class="trophy-name">${name.replace(/</g, '&lt;')}</div>
+    `;
+    costumeOut.style.display = 'block';
+  }
+  costumeBtn.addEventListener('click', showCostume);
+
+  // Populate the party-code display in the cheat sheet from the constant
   const partyCodeCell = document.getElementById('partyCodeCell');
   if (partyCodeCell) partyCodeCell.textContent = PARTY_CODE;
   const partyCodeCopy = document.getElementById('partyCodeCopy');

@@ -1005,16 +1005,24 @@
     if (!partyOn) {
       partyGate = `
         <div class="round-section" style="margin-top:14px;">
-          <h3>🎉 Party Not Started Yet</h3>
-          <p style="color:#c9b8ff; font-size:13px; margin:0 0 10px;">
-            Your full character info — your backstory, the mystery details, round-by-round instructions —
-            unlocks when the host says the magic word at the party. Mingle in character until then!
+          <h3>🔒 Secrets revealed at 8 PM</h3>
+          <p style="color:#c9b8ff; font-size:13px; margin:0 0 10px; line-height:1.6;">
+            Above is who you are — enough to plan your costume and settle into their skin.<br/><br/>
+            <b style="color:#ffb84d;">The rest</b> is a secret. Your hidden motive. The lies you'll tell. What you know that no one else does. All of it stays sealed until the host says the magic word.<br/><br/>
+            <i style="color:#a8c6ff;">Keep this to yourself. Share if you dare.</i>
           </p>
           <div class="code-entry">
-            <input id="partyCodeInput" type="text" placeholder="Enter the code the host just announced" autocomplete="off" />
+            <input id="partyCodeInput" type="text" placeholder="Party code (host will announce it)" autocomplete="off" />
             <button id="partyCodeBtn">Unlock</button>
           </div>
           <div class="code-err" id="partyCodeErr"></div>
+        </div>
+
+        <div class="round-section" style="margin-top:14px; background: linear-gradient(160deg, #180a35, #0a0520); border: 2px solid #ffb84d;">
+          <h3 style="color:#ffb84d;">🏆 Best Costume prize up for grabs</h3>
+          <p style="color:#f0ebff; font-size:13px; margin:0; line-height:1.6;">
+            A trophy will be awarded for <b style="color:#ffb84d;">Best Costume</b> at the end of the night, voted on by the room. Commit to your character's look — this is 1977, baby. Platform shoes, feathered hair, sequins, fur stoles, chest medallions, aviators, caftans, bellbottoms. The more extra, the better.
+          </p>
         </div>
       `;
     }
