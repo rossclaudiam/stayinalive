@@ -788,6 +788,9 @@
     4: "whodunit",
     5: "survivor",
   };
+
+  // KEEP IN SYNC with host.html
+  const PARTY_CODE = "discoball";
   // Normalize codes forgivingly: uppercase, treat spaces and em-dashes as hyphens, strip other noise.
   function normCode(s) {
     return (s || "")
@@ -847,6 +850,25 @@
     const first = q.split(" ")[0];
     for (const c of CHARS) if (c.aliases.map(normalize).includes(first)) return c;
     return null;
+  }
+
+  // ============== Party-unlock state ==============
+  // When true, this guest has entered the party code and sees secrets + rounds.
+  // When false, they see only the teaser (name/costume/personality/connection).
+  function isPartyUnlocked() {
+    try { return localStorage.getItem('mb_party_unlocked') === '1'; } catch(e) { return false; }
+  }
+  function setPartyUnlocked(v) {
+    try { localStorage.setItem('mb_party_unlocked', v ? '1' : '0'); } catch(e) {}
+  }
+
+  // When true, this guest has re-entered their passphrase to see their deeper secret.
+  // (Applies to all characters, not just Vicki, so her card doesn't look different.)
+  function isBackstoryRevealed() {
+    try { return localStorage.getItem('mb_backstory_revealed') === '1'; } catch(e) { return false; }
+  }
+  function setBackstoryRevealed(v) {
+    try { localStorage.setItem('mb_backstory_revealed', v ? '1' : '0'); } catch(e) {}
   }
 
   // ============== Guest unlocked rounds ==============
@@ -932,12 +954,15 @@
 
   function showCard(char) {
     entryPanel.style.display = 'none';
+    const partyOn = isPartyUnlocked();
+    const backstoryOn = isBackstoryRevealed();
     const unlocked = getUnlocked();
     if (viewRound === null) viewRound = getCurrentRound();
     const r = viewRound;
 
+    // ===== Round section — only shown once party is unlocked =====
     let roundSection = '';
-    if (char.rounds) {
+    if (partyOn && char.rounds) {
       roundSection = `
         <div class="round-section">
           <h3>🪩 Rounds</h3>
@@ -959,8 +984,9 @@
       `;
     }
 
+    // ===== Ghost section — only once party is unlocked AND backstory revealed =====
     let ghostSection = '';
-    if (char.key === 'dino') {
+    if (partyOn && backstoryOn && char.key === 'dino') {
       ghostSection = `
         <div class="section-label">👻 Ghost Rules</div>
         <div class="section-content">
@@ -974,8 +1000,55 @@
       `;
     }
 
+    // ===== Party-code entry section — only shown before party is unlocked =====
+    let partyGate = '';
+    if (!partyOn) {
+      partyGate = `
+        <div class="round-section" style="margin-top:14px;">
+          <h3>🎉 Party Not Started Yet</h3>
+          <p style="color:#c9b8ff; font-size:13px; margin:0 0 10px;">
+            Your full character info — your backstory, the mystery details, round-by-round instructions —
+            unlocks when the host says the magic word at the party. Mingle in character until then!
+          </p>
+          <div class="code-entry">
+            <input id="partyCodeInput" type="text" placeholder="Enter the code the host just announced" autocomplete="off" />
+            <button id="partyCodeBtn">Unlock</button>
+          </div>
+          <div class="code-err" id="partyCodeErr"></div>
+        </div>
+      `;
+    }
+
+    // ===== Secret section — party on, but gated behind "fuller backstory" tap-and-passphrase =====
+    let secretSection = '';
+    if (partyOn) {
+      if (backstoryOn) {
+        secretSection = `
+          <div class="section-label">📜 Your fuller backstory · do NOT share</div>
+          <div class="secret">
+            <div class="secret-label">🔒 Private · stays between you and the detective</div>
+            <div class="secret-body">${char.secret}</div>
+          </div>
+        `;
+      } else {
+        secretSection = `
+          <div class="section-label">📜 Fuller backstory</div>
+          <div class="section-content" id="backstoryGate" style="padding:12px 14px; background:rgba(124,92,255,0.08); border-radius:10px; border:1px dashed #7c5cff;">
+            <p style="margin:0 0 10px; color:#4a2fa8; font-style:italic; font-size:14px;">
+              There's more to your character — but it's not for prying eyes. Re-enter your passphrase to see it.
+            </p>
+            <div class="code-entry">
+              <input id="backstoryPassInput" type="password" placeholder="Your passphrase" autocomplete="off" />
+              <button id="backstoryBtn">Reveal</button>
+            </div>
+            <div class="code-err" id="backstoryErr"></div>
+          </div>
+        `;
+      }
+    }
+
     cardPanel.innerHTML = `
-      <div class="panel ${char.key === 'dino' ? 'ghost-card' : ''}">
+      <div class="panel ${char.key === 'dino' && partyOn && backstoryOn ? 'ghost-card' : ''}">
         <h2 class="card-name">${char.name}</h2>
         <p class="card-role">${char.role}</p>
 
@@ -988,19 +1061,55 @@
         <div class="section-label">🔗 Your connection to Dino</div>
         <div class="section-content">${char.relationship}</div>
 
-        <div class="secret">
-          <div class="secret-label">🔒 Your secret · do NOT share</div>
-          <div class="secret-body">${char.secret}</div>
-        </div>
-
+        ${partyGate}
+        ${secretSection}
         ${ghostSection}
-
         ${roundSection}
 
         <button class="back-btn" id="backBtn">← Change Character</button>
       </div>
     `;
     cardPanel.style.display = 'block';
+
+    // ===== Party-code gate handler =====
+    const partyCodeInput = document.getElementById('partyCodeInput');
+    const partyCodeBtn = document.getElementById('partyCodeBtn');
+    const partyCodeErr = document.getElementById('partyCodeErr');
+    function tryPartyUnlock() {
+      const entered = normPhrase(partyCodeInput.value);
+      const expected = normPhrase(PARTY_CODE);
+      if (!entered) return;
+      if (entered !== expected) {
+        partyCodeErr.textContent = "That's not the code the host announced. Try again or check with them.";
+        return;
+      }
+      setPartyUnlocked(true);
+      showCard(char); // re-render with secrets + rounds visible
+    }
+    if (partyCodeBtn) {
+      partyCodeBtn.addEventListener('click', tryPartyUnlock);
+      partyCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryPartyUnlock(); });
+    }
+
+    // ===== Backstory gate handler =====
+    const backstoryPassInput = document.getElementById('backstoryPassInput');
+    const backstoryBtn = document.getElementById('backstoryBtn');
+    const backstoryErr = document.getElementById('backstoryErr');
+    function tryBackstoryReveal() {
+      const entered = normPhrase(backstoryPassInput.value);
+      const expected = normPhrase(PASSPHRASES[char.key] || "");
+      if (!entered) return;
+      if (entered !== expected) {
+        backstoryErr.textContent = "That's not your passphrase. Try again.";
+        return;
+      }
+      setBackstoryRevealed(true);
+      showCard(char); // re-render with secret section expanded
+    }
+    if (backstoryBtn) {
+      backstoryBtn.addEventListener('click', tryBackstoryReveal);
+      backstoryPassInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryBackstoryReveal(); });
+    }
 
     // Wire round buttons — only switch display among UNLOCKED rounds
     cardPanel.querySelectorAll('.round-btn').forEach(btn => {
@@ -1061,7 +1170,13 @@
       errMsg.style.display = 'none';
       viewRound = null;
       nameInput.focus();
-      try { localStorage.removeItem('mb_guest_char'); } catch(e) {}
+      try {
+        localStorage.removeItem('mb_guest_char');
+        // Changing characters clears their backstory-reveal (so the next character
+        // has to re-authenticate), but keeps the party-unlocked flag — once the
+        // party is on, it's on for this browser.
+        localStorage.removeItem('mb_backstory_revealed');
+      } catch(e) {}
     });
   }
 

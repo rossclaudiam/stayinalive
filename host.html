@@ -365,6 +365,21 @@
   </div>
 </div>
 
+<!-- Start the Party -->
+<div class="panel dark" id="party-start">
+  <h2>🎉 Start the Party</h2>
+  <p style="margin-top:0; color:#e8e0ff; font-size:14px;">
+    Before the party, guests who log in see only a <b style="color:#ffb84d;">teaser</b> (character, costume, personality, connection to Dino). Secrets and round scripts stay locked. When you're ready to begin, <b style="color:#ffb84d;">announce the party code</b> aloud and have everyone type it in.
+  </p>
+  <div class="code-reveal" style="background:linear-gradient(135deg, #ffb84d, #4ac4ff); color:#180a35;">
+    🎙️ Say this to unlock the night:
+    <span class="code-big" style="color:#180a35;" id="partyCodeBig">discoball</span>
+  </div>
+  <p style="color:#c9b8ff; font-size:12px; font-style:italic; margin:10px 0 0;">
+    Tip: do this around 8:00–8:15, after everyone has arrived and before Dino drops at 8:30. Guests who missed the announcement can be given the code at any time to catch up.
+  </p>
+</div>
+
 <!-- Guest page link -->
 <a class="guest-link" href="./" target="_blank">
   🪩 Open Guest Landing Page
@@ -488,6 +503,20 @@
     <tbody></tbody>
   </table>
 
+  <h3 style="color:#a8c6ff; margin-top:14px;">Party-start code</h3>
+  <p style="color:#e8e0ff; font-size:13px; margin:4px 0 10px;">
+    Announce this once (around 8:15, before the murder) to unlock each guest's full character info — secrets, round scripts, everything beyond the teaser.
+  </p>
+  <table style="margin-bottom:14px;">
+    <tbody>
+      <tr>
+        <td>Start the Party</td>
+        <td class="code" id="partyCodeCell">discoball</td>
+        <td><button class="copy-btn" id="partyCodeCopy" data-copy="discoball">📋 Copy</button></td>
+      </tr>
+    </tbody>
+  </table>
+
   <h3 style="color:#a8c6ff; margin-top:14px;">Round codes (announce aloud)</h3>
   <table id="codeTable">
     <thead><tr><th>Round</th><th>Code</th><th></th></tr></thead>
@@ -508,6 +537,11 @@
 <script>
   // =============== HOST PASSWORD GATE ===============
   const HOST_PASSWORD = "fontana"; // change this to anything you like
+
+  // =============== PARTY CODE ===============
+  // Guests see only name/costume/personality until you announce this code at the party.
+  // Change if you like, but keep in sync with index.html.
+  const PARTY_CODE = "discoball";
   const lockScreen = document.getElementById('lockScreen');
   const hostPassInput = document.getElementById('hostPassInput');
   const hostPassBtn = document.getElementById('hostPassBtn');
@@ -647,6 +681,14 @@
   prevBtn.onclick = () => setRound(getRound() - 1);
   nextBtn.onclick = () => setRound(getRound() + 1);
   renderRounds();
+
+  // Populate the party-code display from the constant
+  const partyCodeBig = document.getElementById('partyCodeBig');
+  if (partyCodeBig) partyCodeBig.textContent = PARTY_CODE;
+  const partyCodeCell = document.getElementById('partyCodeCell');
+  if (partyCodeCell) partyCodeCell.textContent = PARTY_CODE;
+  const partyCodeCopy = document.getElementById('partyCodeCopy');
+  if (partyCodeCopy) partyCodeCopy.setAttribute('data-copy', PARTY_CODE);
 
   // =============== Cheat sheet rendering ===============
   function renderCheatSheet() {
