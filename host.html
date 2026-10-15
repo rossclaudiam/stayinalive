@@ -325,6 +325,38 @@
     text-align: center; letter-spacing: 1px; text-transform: uppercase;
   }
 
+  /* Roster picker */
+  .expansion-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px; margin: 8px 0;
+  }
+  .expansion-check {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-radius: 8px;
+    background: rgba(255,255,255,0.6); border: 2px solid transparent;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .expansion-check:hover { background: rgba(124,92,255,0.1); }
+  .expansion-check input { accent-color: #7c5cff; width: 18px; height: 18px; cursor: pointer; }
+  .expansion-check.checked { background: rgba(124,92,255,0.12); border-color: #7c5cff; }
+  .expansion-check .ec-name { flex: 1 1 auto; color: #1a0a4a; font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .expansion-check .ec-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    font-family: "Trebuchet MS", sans-serif;
+  }
+  .expansion-check .ec-badge.F { background: #ff8ec0; color: #4a2fa8; }
+  .expansion-check .ec-badge.M { background: #4ac4ff; color: #1a0a4a; }
+
+  .quick-pick-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0 12px; }
+  .quick-pick-btn {
+    padding: 6px 12px; font-size: 11px; font-weight: 800;
+    border: 1px solid #7c5cff; background: #fff8ea; color: #4a2fa8;
+    border-radius: 999px; cursor: pointer; font-family: "Trebuchet MS", sans-serif;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .quick-pick-btn:hover { background: #7c5cff; color: #fff; }
+
   /* Vote tracker */
   .vote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
   @media (max-width: 600px) { .vote-grid { grid-template-columns: 1fr; } }
@@ -461,13 +493,38 @@
   <small>Share this link with your guests · they type their character name + passphrase to get their card</small>
 </a>
 
-<!-- Guest count control -->
-<div class="controls" id="controls">
-  <label for="guestCount">👯 Guest count (including you &amp; your husband):</label>
-  <input id="guestCount" type="number" min="4" max="21" value="12" />
-  <span class="note" id="activeNote">12 of 21 characters active</span>
-  <button class="btn secondary" id="revealAllBtn">Reveal all secrets</button>
-  <button class="btn secondary" id="hideAllBtn">Hide all secrets</button>
+<!-- Guest roster picker -->
+<div class="panel" id="roster-picker">
+  <h2>👯 Guest Roster</h2>
+  <p style="color:#1a0a4a; font-size:14px; margin:4px 0 12px;">
+    The <b>core 12</b> are always active. Below, tick which <b>expansion characters</b> you also want to use —
+    pick based on who's coming and whether you need more male or female roles.
+  </p>
+
+  <h3 style="color:#4a2fa8; margin:10px 0 6px; font-family:'Trebuchet MS', sans-serif; font-size:13px; letter-spacing:0.5px; text-transform:uppercase;">Core 12 — always playing</h3>
+  <p style="color:#4a2fa8; font-size:13px; margin:0 0 14px;">You · Husband · Vicki · Mel · Dr. Feelgood · Tito · Lola · Chip · Mona · Reverend · Bunny · Starla</p>
+
+  <h3 style="color:#4a2fa8; margin:14px 0 6px; font-family:'Trebuchet MS', sans-serif; font-size:13px; letter-spacing:0.5px; text-transform:uppercase;">Expansion (pick as needed)</h3>
+
+  <div class="quick-pick-row">
+    <span style="color:#4a2fa8; font-size:12px; font-weight:700; margin-right:4px;">Quick pick:</span>
+    <button class="quick-pick-btn" data-pick="2F2M">4 extras (2F 2M)</button>
+    <button class="quick-pick-btn" data-pick="3F2M">5 extras (3F 2M)</button>
+    <button class="quick-pick-btn" data-pick="2F3M">5 extras (2F 3M)</button>
+    <button class="quick-pick-btn" data-pick="3F3M">6 extras (3F 3M)</button>
+    <button class="quick-pick-btn" data-pick="clear">Clear</button>
+  </div>
+
+  <div class="expansion-grid" id="expansionGrid"></div>
+
+  <p style="color:#4a2fa8; font-size:14px; margin:14px 0 0;">
+    <b id="rosterCount">Total: 12 guests</b> · <span id="genderBreakdown"></span>
+  </p>
+
+  <div style="margin-top:12px;">
+    <button class="btn secondary" id="revealAllBtn">Reveal all secrets</button>
+    <button class="btn secondary" id="hideAllBtn">Hide all secrets</button>
+  </div>
 </div>
 
 <!-- Section divider -->
@@ -529,7 +586,7 @@
 <!-- Cast (collapsed) -->
 <details class="panel" id="cast-panel">
   <summary><h2 style="display:inline-block; margin:0;">👯 The Cast</h2></summary>
-  <p style="color:#1a0a4a; font-style:italic; margin: 6px 0 16px; font-size: 14px;">21 characters max. Trim from the bottom as needed — the slider greys out characters you're cutting. Core minimum is 6 (you, husband, Vicki, Mel, Dr. Feelgood, +1 suspect).</p>
+  <p style="color:#1a0a4a; font-style:italic; margin: 6px 0 16px; font-size: 14px;">Core 12 are always active. Any expansion characters you ticked in the Guest Roster above appear here too. The rest are greyed out as "Cut."</p>
   <div class="grid" id="cast"></div>
 </details>
 
@@ -934,51 +991,126 @@
       traits: ["Theatrical, bitter, name-drops Bowie","Sequined jumpsuit, glitter eyeshadow, boa","Keeps 'warming up her voice'"],
       secret: "Your one hit song was secretly written by Dino. He was about to claim royalties. You have motive — but you were on-stage when the champagne was tampered with."},
     // ---------- Expansion characters (13-21) ----------
-    { id: 13, name: "Jerry \"The Juice\" Juniper", role: "The bartender (active player)", kind: "suspect", priority: 11,
+    { id: 13, key: "jerry", gender: "M", name: "Jerry \"The Juice\" Juniper", role: "The bartender (active player)", kind: "suspect", priority: 11,
       traits: ["Observant, dry sense of humor","White shirt, black vest, suspenders","Shakes a drink while listening"],
       secret: "You poured Dino's champagne. You tasted a splash at 7:45 — clean. By the time Dino collapsed at 8:30, something was wrong with the bottle. ROUND 2 CLUE-GIVER (if active): you confirm Vicki slipped behind the bar between songs."},
-    { id: 14, name: "Carlos \"Catfish\" Carter", role: "House-band bassist", kind: "suspect", priority: 12,
+    { id: 14, key: "catfish", gender: "M", name: "Carlos \"Catfish\" Carter", role: "House-band bassist", kind: "suspect", priority: 12,
       traits: ["Smooth, understated, says 'yeah man' a lot","Open silk shirt, bellbottoms, pork pie hat","Fiddles with a bass pick"],
       secret: "Dino owes you $3,200 in session fees. His death means you have to beg the lawyer. You hate it but you didn't do it."},
-    { id: 15, name: "Candy Caine", role: "Visiting Vegas showgirl", kind: "suspect", priority: 13,
+    { id: 15, key: "candy", gender: "F", name: "Candy Caine", role: "Visiting Vegas showgirl", kind: "suspect", priority: 13,
       traits: ["Bombshell, loud laugh, Vegas tan","Sequined mini-dress, feathered showgirl collar","Chews bubble gum"],
       secret: "Dino made a pass at you last night and you shut him down. You had a loud, public fight with him at the bar at 8:15. Everyone saw. You did NOT kill him."},
-    { id: 16, name: "Hank \"The Hustle\" Henderson", role: "Competitive disco dance champion", kind: "suspect", priority: 14,
+    { id: 16, key: "hank", gender: "M", name: "Hank \"The Hustle\" Henderson", role: "Competitive disco dance champion", kind: "suspect", priority: 14,
       traits: ["Peacock energy, cannot stop moving","Three-piece white suit, open collar, John Travolta hair","Does spins when nervous"],
       secret: "Dino promised you the Mirror Ball residency, then gave it to Starla last week. You're bitter. But you were doing a dance exhibition at 8:25 — Starla's band was watching you. Alibi."},
-    { id: 17, name: "Delilah Darling", role: "Gossip columnist (Daily Dish)", kind: "suspect", priority: 15,
+    { id: 17, key: "delilah", gender: "F", name: "Delilah Darling", role: "Gossip columnist (Daily Dish)", kind: "suspect", priority: 15,
       traits: ["Nosy, note-taking, flattering then cutting","Red cocktail dress, oversized sunglasses indoors","Carries a tiny camera"],
       secret: "You have polaroids of half this room doing embarrassing things — including Bunny with Dino, Chip at the gambling tables, Reverend selling pills. You blackmail, you don't kill. Dino's death actually hurts you — he was your best source."},
-    { id: 18, name: "Vince \"Velour\" Vicenti", role: "Fashion designer to the stars", kind: "suspect", priority: 16,
+    { id: 18, key: "vince", gender: "M", name: "Vince \"Velour\" Vicenti", role: "Fashion designer to the stars", kind: "suspect", priority: 16,
       traits: ["Flamboyant, air-kisses everyone","Head-to-toe velvet, giant collar, platforms","Judges every outfit aloud"],
       secret: "Dino ordered 40 custom suits for his staff, then stiffed you on the bill. $18,000 unpaid. You're furious — but you'd rather sue him than murder him."},
-    { id: 19, name: "Honey Blaze", role: "Playboy centerfold, Chip's sister", kind: "suspect", priority: 17,
+    { id: 19, key: "honey", gender: "F", name: "Honey Blaze", role: "Playboy centerfold, Chip's sister", kind: "suspect", priority: 17,
       traits: ["Breathless, surprisingly smart","Fur jacket, hot pants, go-go boots","Protects Chip like a lioness"],
       secret: "You introduced Chip to Dino's gambling ring. You feel guilty about his debts. You wanted Dino to forgive the debt — not to kill him."},
-    { id: 20, name: "Francesca \"Frankie\" Finelli", role: "Italian film producer", kind: "suspect", priority: 18,
+    { id: 20, key: "frankie", gender: "F", name: "Francesca \"Frankie\" Finelli", role: "Italian film producer", kind: "suspect", priority: 18,
       traits: ["Chic, chain-smokes, French-kisses hello","Black turtleneck, oversized sunglasses, cigarette holder","Says 'cara' and 'ma dai' constantly"],
       secret: "You pitched Dino on investing in your disco documentary yesterday. He said no. You're annoyed, not vengeful — you're pitching Tito next."},
-    { id: 21, name: "Minnie \"Mimi\" Monroe", role: "Aspiring actress, Lola's niece", kind: "suspect", priority: 19,
+    { id: 21, key: "mimi", gender: "F", name: "Minnie \"Mimi\" Monroe", role: "Aspiring actress, Lola's niece", kind: "suspect", priority: 19,
       traits: ["Wide-eyed, dramatic, star-struck","Marilyn-ish white dress, red lipstick","Says 'omigod' a lot"],
       secret: "You're having a fling with CHIP (yes, Lola's niece dating Lola's enemy's fiancée-cheater — soap opera). You have NO connection to Dino's death. You're pure chaos."},
   ];
 
   const grid = document.getElementById('cast');
-  const guestInput = document.getElementById('guestCount');
-  const activeNote = document.getElementById('activeNote');
+  const expansionGrid = document.getElementById('expansionGrid');
+  const rosterCount = document.getElementById('rosterCount');
+  const genderBreakdown = document.getElementById('genderBreakdown');
 
-  try {
-    const saved = localStorage.getItem('mb_guestCount');
-    if (saved) guestInput.value = saved;
-  } catch(e) {}
+  // The core 12 (priority < 11) are always active. Expansion is user-picked.
+  const CORE_IDS = new Set(CHARS.filter(c => c.priority <= 10).map(c => c.id));
+  const EXPANSION = CHARS.filter(c => c.priority > 10);
+
+  function getExpansionActive() {
+    try {
+      const raw = localStorage.getItem('mb_expansion_active');
+      if (!raw) return new Set();
+      return new Set(JSON.parse(raw));
+    } catch(e) { return new Set(); }
+  }
+  function setExpansionActive(set) {
+    try { localStorage.setItem('mb_expansion_active', JSON.stringify([...set])); } catch(e) {}
+  }
+
+  function getActive() {
+    const active = new Set(CORE_IDS);
+    for (const id of getExpansionActive()) active.add(id);
+    return active;
+  }
+
+  function renderExpansionPicker() {
+    const active = getExpansionActive();
+    expansionGrid.innerHTML = '';
+    for (const c of EXPANSION) {
+      const checked = active.has(c.id);
+      const label = document.createElement('label');
+      label.className = 'expansion-check' + (checked ? ' checked' : '');
+      // Strip quotes from name for cleaner display
+      const shortName = c.name.replace(/"/g, '');
+      label.innerHTML = `
+        <input type="checkbox" ${checked ? 'checked' : ''} data-id="${c.id}" />
+        <span class="ec-name">${shortName}</span>
+        <span class="ec-badge ${c.gender}">${c.gender}</span>
+      `;
+      label.querySelector('input').addEventListener('change', (e) => {
+        const id = parseInt(e.target.dataset.id, 10);
+        const cur = getExpansionActive();
+        if (e.target.checked) cur.add(id); else cur.delete(id);
+        setExpansionActive(cur);
+        renderExpansionPicker();
+        renderCast();
+      });
+      expansionGrid.appendChild(label);
+    }
+
+    // Count breakdown
+    const activeChars = [...active].map(id => EXPANSION.find(c => c.id === id)).filter(Boolean);
+    const fCount = activeChars.filter(c => c.gender === 'F').length;
+    const mCount = activeChars.filter(c => c.gender === 'M').length;
+    const total = 12 + activeChars.length;
+    rosterCount.textContent = `Total: ${total} guests`;
+    genderBreakdown.innerHTML = activeChars.length === 0
+      ? '<span style="color:#4a2fa8;">just the core 12</span>'
+      : `<span style="color:#4a2fa8;">${activeChars.length} extras active · ${fCount}F ${mCount}M</span>`;
+  }
+
+  function applyQuickPick(preset) {
+    // Preset is like "3F2M" or "clear"
+    if (preset === 'clear') {
+      setExpansionActive(new Set());
+      renderExpansionPicker();
+      renderCast();
+      return;
+    }
+    const m = preset.match(/(\d+)F(\d+)M/);
+    if (!m) return;
+    const needF = parseInt(m[1], 10);
+    const needM = parseInt(m[2], 10);
+    const females = EXPANSION.filter(c => c.gender === 'F');
+    const males = EXPANSION.filter(c => c.gender === 'M');
+    const chosen = new Set();
+    // Pick in priority order (lower = higher priority → chosen first)
+    females.sort((a, b) => a.priority - b.priority).slice(0, needF).forEach(c => chosen.add(c.id));
+    males.sort((a, b) => a.priority - b.priority).slice(0, needM).forEach(c => chosen.add(c.id));
+    setExpansionActive(chosen);
+    renderExpansionPicker();
+    renderCast();
+  }
+
+  document.querySelectorAll('.quick-pick-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyQuickPick(btn.dataset.pick));
+  });
 
   function renderCast() {
-    const n = Math.max(4, Math.min(21, parseInt(guestInput.value, 10) || 12));
-    guestInput.value = n;
-    try { localStorage.setItem('mb_guestCount', String(n)); } catch(e) {}
-
-    const sorted = [...CHARS].sort((a,b) => a.priority - b.priority);
-    const active = new Set(sorted.slice(0, n).map(c => c.id));
+    const active = getActive();
 
     grid.innerHTML = '';
     for (const c of CHARS) {
@@ -1005,15 +1137,9 @@
       });
       grid.appendChild(el);
     }
-
-    const activeCount = active.size;
-    const cutCount = CHARS.length - activeCount;
-    activeNote.textContent = cutCount === 0
-      ? `All ${activeCount} characters active`
-      : `${activeCount} active · ${cutCount} cut (shown greyed out)`;
   }
 
-  guestInput.addEventListener('input', renderCast);
+  renderExpansionPicker();
   document.getElementById('revealAllBtn').addEventListener('click', () => {
     document.querySelectorAll('.secret').forEach(s => s.style.display = 'block');
     document.querySelectorAll('.reveal').forEach(b => b.textContent = 'Hide secret ▴');
