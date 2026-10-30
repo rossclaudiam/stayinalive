@@ -236,6 +236,20 @@
   }
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
+  /* Fuller-backstory tap-to-reveal / tap-to-collapse button */
+  #backstoryDetails > summary {
+    list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 14px 16px; margin: 14px 0 10px; min-height: 48px; cursor: pointer;
+    background: linear-gradient(135deg, #7c5cff, #4a2fa8); color: #fff;
+    font-weight: 700; font-size: 15px; border-radius: 12px; border: 0;
+    box-shadow: 0 3px 10px rgba(74,47,168,.35); -webkit-tap-highlight-color: transparent; user-select: none;
+  }
+  #backstoryDetails > summary::-webkit-details-marker { display: none; }
+  #backstoryDetails > summary:active { transform: scale(.98); }
+  #backstoryDetails .bs-action { background: rgba(255,255,255,.2); padding: 6px 12px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
+  #backstoryDetails .bs-show { display: none; }
+  #backstoryDetails:not([open]) .bs-show { display: inline; }
+  #backstoryDetails:not([open]) .bs-hide { display: none; }
 </style>
 </head>
 <body>
@@ -300,7 +314,7 @@
         "Loves your signature pink champagne",
       ],
       relationship: "You own the Mirror Ball. You know everybody. Everybody owes you something — money, favors, feelings.",
-      secret: "You're the murder victim. At 8:30, stagger out clutching your chest, gasp 'The champagne… it was… the champagne…' and drop. At 9:00 you come back as a GHOST (sheet, boa, pale face). See the Ghost section below for how to answer questions.",
+      secret: "You're the murder victim. At 8:30, stagger out clutching your chest, gasp 'The champagne… it was… the champagne…' and drop. At about 8:40 you come back as a GHOST (sheet, boa, pale face). See the Ghost section below for how to answer questions.",
       ghostLines: [
         '"I always said this place would be the death of me. Didn\'t think it\'d be so literal."',
         '"Being dead\'s not so bad. The drinks are stronger."',
@@ -313,19 +327,19 @@
         "You saw Vicki by the bar earlier — but she was always by the bar, she worked coat check.",
         "You had a letter in your pocket from Pearl, your old girlfriend from 1958. Nobody knew.",
         "You were going to change your will TOMORROW — cut Vicki out, sell the club to Tito.",
+        "<b>SECRET — Vicki is your daughter.</b> You are the ONLY one at the party who knows (besides Vicki herself). You tracked her down a year ago and hired her. The old will's beneficiary is in a sealed envelope that not even Mel has opened. Do NOT reveal any of this until the 10:30 PM reveal — dodge every question about it.",
         "You're not surprised you're dead. A little surprised it was poison instead of a baseball bat.",
       ],
       ghostDoesntKnow: [
-        "Who actually poisoned the glass.",
-        "That Vicki is your daughter. (You will find out at the 10 PM reveal — act appropriately shocked.)",
+        "Who actually poisoned the glass. (You suspect nobody. Maybe Tito. You'd be wrong.)",
       ],
       rounds: [
         null, // pre-game
-        { label: "Round 1 — The Death", text: "<b>Showtime, baby.</b> At 8:30 sharp, stagger out, clutch your chest, deliver the line, and <b>drop dramatically</b>. Milk the fall. Lie still until your spouse takes over. Then slip away to put on your ghost costume." },
-        { label: "Round 2 — The Ghost Returns", text: "<b>At 9:00</b> you return as a GHOST. Drift around. Guests will ask you questions. Be truthful about the facts above — but <b>playful</b> about embarrassing things (people you owed money, people you were about to screw over, the stolen heart meds). If asked about Pearl: <i>'Pearl? Oh, Pearl was… before your time, honey.'</i> Ghost can drink and dance. House rule." },
-        { label: "Round 3 — Pearl & Victoria", text: "If a guest brings up Pearl or Victoria now, you can get a little misty. <i>'Pearl… I was young and stupid. She wrote to me once about a baby. I thought it was a hustle. I never answered. God, I never answered.'</i> You still don't know Vicki is the baby." },
+        { label: "Round 1 — The Death", text: "<b>Showtime, baby.</b> At 8:30 sharp, stagger out, clutch your chest, deliver the line, and <b>drop dramatically</b>. Milk the fall. Lie still only a minute or two until your spouse takes over, then slip away and put on your ghost costume. <b>Be back as a ghost by about 8:40</b> — no lying on the floor for long." },
+        { label: "Round 2 — The Ghost Returns", text: "You're a GHOST now (back since about 8:40). Drift around. Guests will ask you questions. Be truthful about the facts above — but <b>playful</b> about embarrassing things (people you owed money, people you were about to screw over, the stolen heart meds). If asked about Pearl: <i>'Pearl? Oh, Pearl was… before your time, honey.'</i> Ghost can drink and dance. House rule." },
+        { label: "Round 3 — Pearl & Victoria", text: "If a guest brings up Pearl or Victoria now, you can get a little misty. <i>'Pearl… I was young and stupid. She wrote to me once about a baby. I thought it was a hustle. I never answered. God, I never answered.'</i> Stop there — you know exactly who that baby grew up to be, but <b>say nothing about Vicki.</b> If pressed on the will: <i>'Somebody was getting a nasty surprise tomorrow, honey. That's all this ghost is saying.'</i>" },
         { label: "Accusations", text: "Float around and sow confusion. You can hint that you suspect Tito (you'd be wrong). You can forgive Lola in a dramatic monologue. Enjoy yourself — you're the most interesting corpse in New York." },
-        { label: "The Reveal", text: "When your spouse names Vicki as the killer and reveals she's your daughter — <b>react big</b>. Jaw drop. Hand to (ghostly) chest. <i>'Vicki? Pearl's… MY DAUGHTER? Oh baby. Oh, sweetheart. I'm sorry.'</i> Then rise from the dead and toast her. <i>'Someone put on I Will Survive — the dead man wants to dance!'</i>" },
+        { label: "The Reveal", text: "When your spouse names Vicki as the killer and reveals she's your daughter — <b>drop the act.</b> Everyone else is gasping — you're the only one who isn't surprised, just wrecked. Hand to (ghostly) chest, soft voice. <i>'Yes. My baby girl. I found you a year ago and never had the guts to say it. I was going to make it right, sweetheart. I'm sorry.'</i> Then rise from the dead and toast her. <i>'Someone put on I Will Survive — the dead man wants to dance!'</i>" },
       ],
     },
     {
@@ -341,12 +355,12 @@
         "Keeps saying you 'just adore' Dino",
       ],
       relationship: "You work at the Mirror Ball. Dino hired you a year ago. He's been 'mentoring' you.",
-      secret: "<b>YOU ARE THE MURDERER.</b> You are secretly Dino's daughter from his 1958 fling with a woman named Pearl, who died broke in 1972. He promised you the club in his will. Last week he told you he was selling it to Tito and cutting you out. You stole a bottle of heart medication from Dr. Feelgood's bag at a party last week, crushed it with a sedative, and dropped it into Dino's pink champagne bottle tonight while you 'went to grab a jacket.' <b>Do NOT confess.</b> Deflect. Act shocked.",
+      secret: "You are secretly Dino's daughter, from his 1958 fling with a woman named Pearl, who died broke in 1972. Dino found you a year ago and hired you, and he promised you the club in his will. Last week he told you he was selling it to Tito and cutting you out. You were devastated — but you haven't told a soul. Tonight, play it as a heartbroken, grieving coat check girl. <b>Keep your secret.</b> Nobody here knows who you really are. <i>(There's more to your night than you've let yourself think about. Your full story unlocks in Round 3.)</i>",
       rounds: [
         null,
         { label: "Round 1 — Grief & Shock", text: "<b>React with horror and tears when Dino drops.</b> Say things like <i>'Oh my god, he was like a father to me!'</i> (…which, you know, is accurate.) If anyone asks where you were — you were at coat check, as always. If asked about your parents — grew up in Queens, mother died when you were young. Keep it vague." },
-        { label: "Round 2 — Deflect the Bar Clue", text: "When the detective reveals someone 'went to grab a jacket' — <b>stay calm.</b> You can admit you went to the coat room (you work there), but say you were grabbing a coat for a <b>guest</b> who felt chilly. Don't name a specific guest unless pressed. If pressed, say Mona asked for her shawl. Mona will probably agree because she's dramatic." },
-        { label: "Round 3 — The Pearl Letter", text: "When the Pearl letter is revealed — <b>act confused</b>. 'Pearl? Victoria? I don't know anyone by those names.' If someone looks at you, go pale and say you need some air. Then come back and double down. Your mother's name was NOT Pearl, as far as anyone here knows." },
+        { label: "Round 2 — Deflect the Bar Clue", text: "When the detective reveals someone 'went to grab a jacket' — <b>stay calm.</b> Play it as an innocent mix-up. You can admit you went to the coat room (you work there), and say you were grabbing a coat for a <b>guest</b> who felt chilly. Don't name a specific guest unless pressed. If pressed, say Mona asked for her shawl. Mona will probably agree because she's dramatic." },
+        { label: "Round 3 — The Truth", text: "<b>🔓 YOUR FULL STORY: YOU ARE THE MURDERER.</b> Last week you stole a bottle of heart medication from Dr. Feelgood's bag at a party. Tonight you crushed it with a sedative and dropped it into Dino's pink champagne bottle behind the bar, when you 'went to grab a jacket.' Until now you've been playing it straight — from here on, you know. <b>Do NOT confess.</b> Deflect and keep the heat on others. <br/><br/><b>When the Pearl letter is revealed — act confused.</b> 'Pearl? Victoria? I don't know anyone by those names.' If someone looks at you, go pale and say you need some air. Then come back and double down. Your mother's name was NOT Pearl, as far as anyone here knows." },
         { label: "Accusations", text: "<b>Point at Tito.</b> He wanted the club. He had motive. Make a case against him. Alternatively, point at Lola (publicly dumped, bitter). Keep the heat on them. Volunteer tears if useful." },
         { label: "The Reveal", text: "When the detective names you — <b>let go</b>. You can collapse into tears, or get defiant, or deliver a monologue. Suggested: <i>'He threw my mother away like trash. He threw ME away like trash. I was going to inherit this place. He was going to take that from me too.'</i> You're the villain. Enjoy it." },
       ],
@@ -364,14 +378,14 @@
         "Deeply loyal to Dino despite everything",
       ],
       relationship: "You've been Dino's lawyer for 15 years. You've cleaned up a lot of his messes.",
-      secret: "You know Dino was planning to change his will TOMORROW — cutting out Vicki (the coat check girl, who he said was his daughter?!) and selling the club to Tito. You did NOT kill him. <b>You're the Round 1 clue-giver</b> — when the detective calls on you around 8:45, reveal the will information.",
+      secret: "You drafted Dino's NEW will for tomorrow and the papers selling the club to Tito. You know someone is being cut out of the old will — but <b>you don't know who</b>. Dino kept the current beneficiary in a sealed envelope he handled himself (it's in your briefcase, unopened). You did NOT kill him. <b>You're the Round 1 clue-giver</b> — when the detective calls on you around 8:50, reveal that someone was being cut out, then throw out a few red herrings.",
       rounds: [
         null,
-        { label: "Round 1 — YOUR BIG MOMENT", text: "<b>When the detective calls on you</b>, look flustered. Chew your pencil. Then reveal: <i>'Dino was going to change his will tomorrow. The current beneficiary — well, that was going to change.'</i> You can hint there was a mystery heir named 'Victoria' in the current will — but say you don't know who that is. (You suspect it was the coat check girl because Dino once muttered 'the kid' when looking at her. But you're not sure.)" },
-        { label: "Round 2 — The Jacket Clue", text: "You weren't at the bar. You were in a corner reviewing papers. If asked, you noticed Vicki heading toward the coat room 'to grab something.' You didn't think anything of it at the time. Mention this if the detective asks." },
-        { label: "Round 3 — Pearl", text: "When the Pearl letter surfaces — react with recognition. <i>'Pearl… Pearl Sutherland? Dino mentioned her once. 20 years ago. I thought she was a story he told when he was drunk.'</i> You never knew about a baby." },
-        { label: "Accusations", text: "Your job: look nervous, be helpful, don't accuse anyone directly. If pushed, say <i>'the person who had the most to lose from the new will.'</i> Which is… the current beneficiary. Which is Victoria. Which is… <i>Oh.</i>" },
-        { label: "The Reveal", text: "React with dawning horror when it all clicks. <i>'The coat check girl was Victoria. I should have known. I should have asked. Dino, you absolute idiot — why didn't you tell me?'</i>" },
+        { label: "Round 1 — YOUR BIG MOMENT", text: "<b>When the detective calls on you</b>, look flustered. Chew your pencil. Then reveal: <i>'Dino was changing his will tomorrow. Somebody was being cut out — completely. Who? He never told me. It's in a sealed envelope he wouldn't let me touch.'</i> Do NOT name or guess who. Then, nervously, <b>throw out red herrings</b> (pick 3, spread them out): <i>'Tito's been in my office three times this week — the club sale papers aren't signed, and he is NOT a patient man.'</i> · <i>'Lola screamed at me Tuesday — Dino had me draft her termination letter for the documentary.'</i> · <i>'Chip owes Dino a small fortune — Dino asked me to write a letter to Chip's father.'</i> · <i>'And the Reverend… let's just say I'm holding a file on him I'd rather not discuss.'</i>" },
+        { label: "Round 2 — The Jacket Clue", text: "You weren't at the bar. You were in a corner reviewing papers. If asked who drifted away from the toast, name several people: <i>'Tito stormed past me toward the bar. Lola stomped off to the VIP stairs. Chip was off at the gambling tables. And the coat check girl was running coats around, same as always.'</i> Treat Vicki as no more suspicious than anyone else — lean harder on Tito and Lola." },
+        { label: "Round 3 — Pearl", text: "When the Pearl letter surfaces — react with recognition. <i>'Pearl… Pearl Sutherland? Dino mentioned her once. 20 years ago. I thought she was a story he told when he was drunk.'</i>" },
+        { label: "Accusations", text: "Your job: look nervous, be helpful. If pushed, point at Tito first (<i>'He wanted that club badly.'</i>), then Lola (<i>'Publicly humiliated — and she was loud about it.'</i>). If asked who was cut out of the will, stay honest: you don't know." },
+        { label: "The Reveal", text: "When the detective names Vicki and her parentage, you are as shocked as anyone. Fumble open the sealed envelope in your briefcase and read the name aloud: <i>'Victoria Pearl… Fontana. Sole heir.'</i> Then: <i>'The coat check girl? His DAUGHTER? Fifteen years I've been his lawyer! Dino, you absolute idiot — why didn't you tell me?'</i>" },
       ],
     },
     {
@@ -391,7 +405,7 @@
       rounds: [
         null,
         { label: "Round 1 — Deflect, Flirt", text: "Deflect, flirt, order drinks. Confirm you were Dino's doctor. Admit he had heart issues. Say he was healthy otherwise. Do NOT mention the stolen bottle yet." },
-        { label: "Round 2 — YOUR BIG MOMENT", text: "<b>When the detective asks about Dino's medication</b> (or if nobody asks by 9:20, volunteer it): <i>'Actually… I had a bottle of his pills stolen from my bag at a party last week. I meant to say something sooner.'</i> If asked who was there: <i>'A lot of people. Someone young, pretty, I don't remember exactly…'</i> You can mention Vicki was there — but as one of several." },
+        { label: "Round 2 — YOUR BIG MOMENT", text: "<b>When the detective asks about Dino's medication</b> (or if nobody asks by 9:25, volunteer it): <i>'Actually… I had a bottle of his pills stolen from my bag at a party last week. I meant to say something sooner.'</i> If asked who was there: <i>'A lot of people. Someone young, pretty, I don't remember exactly…'</i> You can mention Vicki was there — but as one of several." },
         { label: "Round 3 — Pearl", text: "You don't know Pearl. You can note that Dino had a sentimental streak for an old flame — mentioned a 'Pearl' once when drunk, said she 'got away.' That's all." },
         { label: "Accusations", text: "You can note that the method (crushed heart meds) suggests someone with access to medication. 'The killer knew what they were doing with those pills.' Let others connect the dots." },
         { label: "The Reveal", text: "<i>'Oh my god. Vicki. She was at that party. She was by my bag. I remember now.'</i> Clap your hand to your forehead." },
@@ -460,7 +474,7 @@
       rounds: [
         null,
         { label: "Round 1 — Blustery", text: "Act annoyed to be here at all. <i>'Do you know who my FATHER is?'</i> Deny owing anyone anything." },
-        { label: "Round 2 — Panicky", text: "If pressed about debts, get defensive. <i>'I settle my accounts, old sport.'</i> Try not to look relieved. Fail at this." },
+        { label: "Round 2 — Panicky", text: "If pressed about debts, get defensive. <i>'I settle my accounts, old sport.'</i> Try not to look relieved. Fail at this. <b>If Jerry says he saw you behind the bar:</b> admit it sheepishly — you were sneaking free drinks because your tab is maxed out. <i>'A man gets thirsty, champ. I didn't touch any pink champagne.'</i> Don't mention the debt unless pressed." },
         { label: "Round 3 — Clueless", text: "You have no idea who Pearl or Victoria are. You're relieved that someone else is the center of attention." },
         { label: "Accusations", text: "Point at Tito or at Vicki (randomly). You're a bad detective but a loud one." },
         { label: "The Reveal", text: "Realize mid-reveal you're off the hook. Pump your fist. Order champagne. <i>'Daddy never has to know. God BLESS you, Vicki, for your atrocious crime.'</i>" },
@@ -548,12 +562,12 @@
         "Claims she was supposed to be on tour but 'cancelled to be here'",
       ],
       relationship: "You and Dino were songwriting partners in '74 — a professional collaboration you've since publicly denied.",
-      secret: "Your one hit song, 'Lady in the Mirror,' was secretly co-written by Dino. He was about to claim half the royalties AND go public that he was the real talent — which would expose that you've been lying about writing it for ten years. You have motive — but you were ON STAGE performing when the champagne was tampered with. You did NOT kill him.",
+      secret: "Your one hit song, 'Lady in the Mirror,' was secretly co-written by Dino. He was about to claim half the royalties AND go public that he was the real talent — which would expose that you've been lying about writing it for ten years. You have motive — but you were ON STAGE performing when the champagne was tampered with. You did NOT kill him. <b>You're a small clue-giver:</b> from the stage you noticed a young woman with feathered hair, a satin jacket draped over her arm, slip behind the bar mid-song. You assume it's staff and think nothing of it — until Round 3.",
       rounds: [
         null,
         { label: "Round 1 — Diva", text: "Act like a diva. Nothing can be about anyone but you. Remind everyone you were ON STAGE at 8:20 performing your hit." },
         { label: "Round 2 — Insist On Alibi", text: "<i>'I was ON STAGE at 8:20! Everyone saw me! Everyone!'</i> This is actually true. You couldn't have tampered with the bottle. Lean on this." },
-        { label: "Round 3 — Pearl", text: "You don't know Pearl. You can pretend you do, dramatically, for attention. 'Oh, PEARL. Everyone knew Pearl.' (You don't. You're lying for attention.)" },
+        { label: "Round 3 — Pearl", text: "You don't know Pearl. You can pretend you do, dramatically, for attention. 'Oh, PEARL. Everyone knew Pearl.' (You don't. You're lying for attention.) <b>Your breadcrumb:</b> when the conversation turns to who was behind the bar, drop it dramatically, as if it's about your performance: <i>'Darling, I had the best view in the house from that stage. Somebody in a little mini-dress slipped behind the bar mid-chorus — satin jacket over her arm, feathered hair. She never put the jacket on, if you ask me. I was too busy being magnificent to care.'</i> Do NOT name anyone — you don't know her name, just the look. Then pivot back to yourself." },
         { label: "Accusations", text: "Accuse Lola (another jealous ex). Pretend to faint when accused yourself. Get back up and keep accusing." },
         { label: "The Reveal", text: "<i>'A DAUGHTER? OH my GOD. This is BIGGER than Fleetwood Mac.'</i> Immediately start thinking about how to turn this into a comeback song." },
       ],
@@ -574,14 +588,14 @@
         "Calls everyone 'friend' or 'boss'",
       ],
       relationship: "You pour every drink at this club. Dino is your boss. You've seen everything that happens at this bar.",
-      secret: "You poured Dino's champagne tonight. You tasted a splash from his bottle at 7:45 — clean. By 8:30 something was wrong. You saw Vicki slip BEHIND the bar between songs when she 'went to grab a jacket' — unusual, because coat check is on the other side. <b>YOU ARE THE ROUND 2 CLUE-GIVER.</b> When the detective asks you about the bar at 9:15, confirm all of this.",
+      secret: "You poured Dino's champagne tonight. You tasted a splash from his bottle at 7:45 — clean. By 8:30 something was wrong. You saw Chip Chadwick BEHIND the bar around 8:00, helping himself to drinks and rooting around under the counter — nobody's allowed back there. You also heard a voice behind you say something about 'grabbing a jacket' while you were turned around, but you didn't see who. <b>YOU ARE THE ROUND 2 CLUE-GIVER.</b> When the detective asks you about the bar at 9:15 or after, point at Chip and mention the jacket remark without naming anyone.",
       rounds: [
         null,
         { label: "Round 1 — Shocked", text: "React with genuine shock when Dino drops. <i>'I poured his drink an hour ago! It was fine!'</i> Hover near the bar, towel in hand. Let the detective come to you." },
-        { label: "Round 2 — YOUR BIG MOMENT", text: "<b>When the detective asks about the bar</b>, reveal: <i>'Only one person besides Dino touched his pink bottle tonight. It was Vicki — I saw her slip behind the bar between songs when she said she was grabbing a jacket. Coat check is the OTHER side of the room. Didn't think anything of it at the time.'</i> Deliver this calmly, like a credible witness." },
+        { label: "Round 2 — YOUR BIG MOMENT", text: "<b>When the detective asks about the bar</b>, reveal: <i>'Nobody's supposed to be behind my bar but me and Dino. But around eight I caught Chip back there, pawing through the bottles like a kid in a candy store. And while my back was turned, somebody said they were just grabbing a jacket — never saw who.'</i> Do NOT name anyone else. Deliver this calmly, like a credible witness. You poured Dino's drinks yourself, so expect a few guests to eye you — shrug it off: <i>'I pour, I don't poison. Ask anyone.'</i>" },
         { label: "Round 3 — Confirm Pearl Timing", text: "You remember Dino having a letter in his jacket pocket — he showed it to you earlier tonight, said 'this one's from 20 years ago.' You didn't read it, didn't ask." },
-        { label: "Accusations", text: "You're a professional witness, not an accuser. If asked who you'd put money on, say: <i>'The person who went behind my bar. I don't name names, but I don't forget faces either.'</i>" },
-        { label: "The Reveal", text: "Quiet satisfaction. <i>'Called it.'</i> Pour yourself a drink. You've earned it." },
+        { label: "Accusations", text: "You're a professional witness, not an accuser. If asked who you'd put money on, say: <i>'The man I caught behind my bar. Chip. I don't name names, but I don't forget faces either.'</i>" },
+        { label: "The Reveal", text: "Genuine surprise. <i>'The coat check girl? Huh. I was watching the wrong drunk.'</i> Pour yourself a drink — and one for Chip, with an apology." },
       ],
     },
     {
@@ -775,10 +789,10 @@
   const ROUNDS = [
     { id: 0, label: "Pre-game" },
     { id: 1, label: "Round 1 — The Murder (8:30)" },
-    { id: 2, label: "Round 2 — Ghost & Bar (9:00)" },
-    { id: 3, label: "Round 3 — The Letter (9:40)" },
-    { id: 4, label: "Accusations (9:50)" },
-    { id: 5, label: "The Reveal (10:00)" },
+    { id: 2, label: "Round 2 — Ghost & Bar (9:15)" },
+    { id: 3, label: "Round 3 — The Letter (9:45)" },
+    { id: 4, label: "Accusations (10:15)" },
+    { id: 5, label: "The Reveal (10:30)" },
   ];
   const ROUND_CODES = {
     0: "",            // pre-game: always unlocked
@@ -955,7 +969,7 @@
   function showCard(char) {
     entryPanel.style.display = 'none';
     const partyOn = isPartyUnlocked();
-    const backstoryOn = isBackstoryRevealed();
+    const backstoryOn = partyOn; // party code unlocks the fuller backstory — no second passphrase
     const unlocked = getUnlocked();
     if (viewRound === null) viewRound = getCurrentRound();
     const r = viewRound;
@@ -1030,29 +1044,20 @@
     // ===== Secret section — party on, but gated behind "fuller backstory" tap-and-passphrase =====
     let secretSection = '';
     if (partyOn) {
-      if (backstoryOn) {
-        secretSection = `
-          <div class="section-label">📜 Your fuller backstory · do NOT share</div>
+      let collapsed = false;
+      try { collapsed = localStorage.getItem('mb_backstory_collapsed') === '1'; } catch(e) {}
+      secretSection = `
+        <details id="backstoryDetails" ${collapsed ? '' : 'open'}>
+          <summary>
+            <span>📜 Your fuller backstory</span>
+            <span class="bs-action"><span class="bs-hide">👁️ Tap to hide</span><span class="bs-show">👁️ Tap to reveal</span></span>
+          </summary>
           <div class="secret">
             <div class="secret-label">🔒 Private · stays between you and the detective</div>
             <div class="secret-body">${char.secret}</div>
           </div>
-        `;
-      } else {
-        secretSection = `
-          <div class="section-label">📜 Fuller backstory</div>
-          <div class="section-content" id="backstoryGate" style="padding:12px 14px; background:rgba(124,92,255,0.08); border-radius:10px; border:1px dashed #7c5cff;">
-            <p style="margin:0 0 10px; color:#4a2fa8; font-style:italic; font-size:14px;">
-              There's more to your character — but it's not for prying eyes. Re-enter your passphrase to see it.
-            </p>
-            <div class="code-entry">
-              <input id="backstoryPassInput" type="password" placeholder="Your passphrase" autocomplete="off" />
-              <button id="backstoryBtn">Reveal</button>
-            </div>
-            <div class="code-err" id="backstoryErr"></div>
-          </div>
-        `;
-      }
+        </details>
+      `;
     }
 
     cardPanel.innerHTML = `
@@ -1099,24 +1104,12 @@
       partyCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryPartyUnlock(); });
     }
 
-    // ===== Backstory gate handler =====
-    const backstoryPassInput = document.getElementById('backstoryPassInput');
-    const backstoryBtn = document.getElementById('backstoryBtn');
-    const backstoryErr = document.getElementById('backstoryErr');
-    function tryBackstoryReveal() {
-      const entered = normPhrase(backstoryPassInput.value);
-      const expected = normPhrase(PASSPHRASES[char.key] || "");
-      if (!entered) return;
-      if (entered !== expected) {
-        backstoryErr.textContent = "That's not your passphrase. Try again.";
-        return;
-      }
-      setBackstoryRevealed(true);
-      showCard(char); // re-render with secret section expanded
-    }
-    if (backstoryBtn) {
-      backstoryBtn.addEventListener('click', tryBackstoryReveal);
-      backstoryPassInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryBackstoryReveal(); });
+    // ===== Backstory collapse (remembered so it stays hidden across re-renders) =====
+    const backstoryDetails = document.getElementById('backstoryDetails');
+    if (backstoryDetails) {
+      backstoryDetails.addEventListener('toggle', () => {
+        try { localStorage.setItem('mb_backstory_collapsed', backstoryDetails.open ? '0' : '1'); } catch(e) {}
+      });
     }
 
     // Wire round buttons — only switch display among UNLOCKED rounds
@@ -1184,6 +1177,7 @@
         // has to re-authenticate), but keeps the party-unlocked flag — once the
         // party is on, it's on for this browser.
         localStorage.removeItem('mb_backstory_revealed');
+        localStorage.removeItem('mb_backstory_collapsed');
       } catch(e) {}
     });
   }
